@@ -8,29 +8,10 @@
     <link rel="stylesheet" type="text/css" href="../css/aui.css"/>
     <style>
     header {
-        height: 150px;
+        height: 40px;
         padding-top: 8px;
         background-image: -webkit-linear-gradient(to right , #7A88FF, #7AFFAF);
         background-image: linear-gradient(to right , #7A88FF, #7AFFAF);
-    }
-
-    header .icon-panel {
-        width: 100%;
-        height: 86px;
-        text-align: center;
-    }
-
-    header .icon-panel .icon {
-        display: inline-block;
-        box-sizing: border-box;
-        width: 86px;
-        height: 86px;
-        border: 3px solid rgba(#4aa63b, 0.86);
-        border-radius: 86px;
-        background-image: url(../image/default_square.png);
-        background-size: 100% 100%;
-        background-position: center center;
-        background-repeat: no-repeat;
     }
 
     header .username {
@@ -44,7 +25,7 @@
     header .account-info {
         height: 30px;
         line-height: 30px;
-        font-size: 12px;
+        font-size: 14px;
         color: #fff;
         text-align: center;
     }
@@ -145,10 +126,8 @@
 
 <body>
     <header>
-        <div class="icon-panel" tapmode onclick="fnSetAvatar()">
-            <div id="icon" class="icon"></div>
-        </div>
-        <div id="username" class="username"></div>
+
+        <!--<div id="username" class="username"></div> !-->
         <div class="account-info">本月订单数：0 <span class="separator">|</span>收入：￥0</div>
     </header>
     <section>
