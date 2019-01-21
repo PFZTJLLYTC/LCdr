@@ -130,6 +130,16 @@
     .highlight {
         opacity: 0.7;
     }
+    .text1 {
+        box-sizing: border-box;
+        padding-right: 0;
+        width: auto;
+        height: 60px;
+        line-height: 60px;
+        font-size: 13px;
+        color: #888;
+        text-align: right;
+    }
     </style>
 </head>
 
@@ -149,11 +159,17 @@
                 <div class="text">查看所有订单详情</div>
             </div>
         </div>
-        <div class="option" tapmode onclick="fnOpenStatusWin();">
+        <div class="option">
             <div class="icon icon-status"></div>
             <div class="title">当前状态</div>
             <div class="arrow-panel">
-                <div class="text">修改状态</div>
+                <div class="text1" >
+                    <select class="text">
+                        <option value="b" >休息中</option>
+                         <option value="o">在路上</option>
+                        <option value="o">待出行</option>
+                     </select>
+                </div>
             </div>
         </div>
         <div class="option" tapmode onclick="fnOpenInformationWin();">
@@ -224,13 +240,6 @@ function fnOpenMyOrderWin() {
     });
 }
 
-// 打开状态Window
-function fnOpenStatusWin() {
-    api.openWin({
-        name: 'status',
-        url: './status.html'
-    });
-}
 
 // 打开信息Window
 function fnOpenInformationWin() {
