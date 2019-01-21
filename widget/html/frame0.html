@@ -9,9 +9,146 @@
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
     <style>
         .empty{ text-align: center; padding: 120px 0; }
+        .wrap-row{
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-orient: horizontal;
+      -webkit-flex-flow: row;
+      flex-flow: row;
+    }
+    .wrap-col{
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-flex-flow: column;
+      flex-flow: column;
+    }
+    .item{
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+      flex: 1;
+      margin:auto 0px;
+    }
+    .icon{
+      width: 25px;
+      height:25px;
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size:25px;
+    }
+    .icon-tel{
+      background-image: url("../image/telphone.png");
+    }
+    .icon-time{
+      background-image: url("../image/time.png");
+    }
+    .icon-people{
+      background-image: url("../image/people.png");
+    }
+    .icon-addr{
+      background-image: url("../image/address.png");
+    }
+    .option{
+      box-sizing: border-box;
+      width: 100%;
+      height: 61px;
+      border-bottom: 1px solid #ddd;
+    }
+    .option .source{
+      text-align: center;
+    }
+    .option .destination{
+      text-align: center;
+    }
+    .time{
+      text-align: center;
+    }
+    .option .input {
+        -webkit-box-flex: 6;
+        -webkit-flex: 6;
+        flex: 6;
+        border: none;
+        outline: none;
+        height: 20px;
+        font-size: 16px;
+        line-height: 20px;
+    }
+    .option .input-time{
+      pointer-events: none;
+    }
+    .option .title {
+        -webkit-box-flex:2;
+        -webkit-flex: 2;
+        flex: 2;
+        box-sizing: border-box;
+        font-size: 14px;
+        text-align: left;
+    }
+    .btn {
+        width: 200px;
+        height: 50px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 32px;
+        background: -webkit-linear-gradient(to right , #7A88FF, #7AFFAF);
+        background: linear-gradient(to right , #7A88FF, #7AFFAF);
+        line-height: 50px;
+        color: #fff;
+        font-size: 24px;
+        text-align: center;
+        border-radius: 8px;
+    }
+    .to{
+      width: 30px;
+      height: 30px;
+      background-size: 30px;
+      background-repeat: no-repeat;
+      background-image: url("../image/wangfan.png");
+      background-position: center center;
+    }
+    .highlight {
+        opacity: 0.7;
+    }
+    .position{
+        height:60px;
+        line-height: 60px;
+        vertical-align: middle;
+    }
     </style>
 </head>
 <body>
-    <div class="empty">订单</div>
+  <!--  <div class="empty">订单</div>-->
+    <div class="wrap-col">
+    <div class="wrap-row option item">
+      <div id=source class="source item">出发地</div>
+      <div class="position"><span align="left">上海</span></div>
+      <div class="to item"></div>
+      <div class="position"><span align="right">杭州</span></div>
+      <div id=destination class="destination item">目的地</div>
+    </div>
+    <div class="option wrap-row item">
+      <div class="item icon icon-time"></div>
+      <span class="title item"for="time">时间</span>
+      <div id="time" class="input item input-time" type="text">1/21 08:30</div>
+    </div>
+    <div class="option wrap-row item">
+      <div class="item icon icon-tel"></div>
+      <label class="title item" for="tel">联系电话</label>
+      <div id="tel" class="input item" type="number">135xxxxxxxx</div>
+    </div>
+    <div class="option wrap-row item">
+      <div class="item icon icon-people"></div>
+      <label class="title item" for="people">乘客人数</label>
+      <div id="people" class="input item" type="number">3人</div>
+    </div>
+    <div class="option wrap-row item">
+      <div class="item icon icon-addr"></div>
+      <label class="title item" for="address">详细地址</label>
+      <div id="address" class="input item" type="text">上海市普陀区华东师范大学</div>
+    </div>
+  </div>
+  <script type="text/javascript" src="../script/api.js"></script>
 </body>
 </html>
