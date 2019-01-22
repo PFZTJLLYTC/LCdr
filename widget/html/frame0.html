@@ -100,6 +100,26 @@
           <div class="drivertel item">联系电话:{{drivertel}}</div>
         </div>
       </div>
+      <div class="order wrap-col">
+        <div class="carinfo wrap-row item">
+          <span class="check" tapmode onclick="fnOpenMyOrderWin()">查看订单&gt;</span>
+        </div>
+        <div class="from-to wrap-row item">
+          <div class="from item">
+            <div class="addr fromaddr" id="fromaddr">{{fromaddr}}</div>
+            <div class="time fromtime" id="fromtime">{{fromtime}}</div>
+          </div>
+          <div class="middle item"></div>
+          <div class="to item">
+            <div class="addr toaddr" id="toaddr">{{toaddr}}</div>
+            <div class="time totime" id="totime">{{totime}}</div>
+          </div>
+        </div>
+        <div class="driver wrap-row item">
+          <div class="drivername item">乘客数:3人</div>
+          <div class="drivertel item">联系电话:{{drivertel}}</div>
+        </div>
+      </div>
       {{/if}}
     </script>
     <script>
