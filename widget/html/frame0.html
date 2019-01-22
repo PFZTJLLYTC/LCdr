@@ -4,151 +4,138 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>订单</title>
+    <title>行程</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css"/>
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/order.css"/>
+    <script src="../script/template-web.js"></script>
     <style>
-        .empty{ text-align: center; padding: 120px 0; }
-        .wrap-row{
-      display: -webkit-box;
-      display: -webkit-flex;
-      display: flex;
-      -webkit-box-orient: horizontal;
-      -webkit-flex-flow: row;
-      flex-flow: row;
+    html,body{
+      background-color:rgb(235, 235, 235);
     }
-    .wrap-col{
-      display: -webkit-box;
-      display: -webkit-flex;
-      display: flex;
-      -webkit-box-orient: vertical;
-      -webkit-flex-flow: column;
-      flex-flow: column;
-    }
-    .item{
-      -webkit-box-flex: 1;
-      -webkit-flex: 1;
-      flex: 1;
-      margin:auto 0px;
-    }
-    .icon{
-      width: 25px;
-      height:25px;
-      background-repeat: no-repeat;
-      background-position: center center;
-      background-size:25px;
-    }
-    .icon-tel{
-      background-image: url("../image/telphone.png");
-    }
-    .icon-time{
-      background-image: url("../image/time.png");
-    }
-    .icon-people{
-      background-image: url("../image/people.png");
-    }
-    .icon-addr{
-      background-image: url("../image/address.png");
-    }
-    .option{
-      box-sizing: border-box;
-      width: 100%;
-      height: 61px;
-      border-bottom: 1px solid #ddd;
-    }
-    .option .source{
-      text-align: center;
-    }
-    .option .destination{
-      text-align: center;
-    }
-    .time{
-      text-align: center;
-    }
-    .option .input {
-        -webkit-box-flex: 6;
-        -webkit-flex: 6;
-        flex: 6;
-        border: none;
-        outline: none;
-        height: 20px;
-        font-size: 16px;
-        line-height: 20px;
-    }
-    .option .input-time{
-      pointer-events: none;
-    }
-    .option .title {
-        -webkit-box-flex:2;
-        -webkit-flex: 2;
-        flex: 2;
-        box-sizing: border-box;
-        font-size: 14px;
-        text-align: left;
-    }
-    .btn {
-        width: 200px;
-        height: 50px;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 32px;
-        background: -webkit-linear-gradient(to right , #7A88FF, #7AFFAF);
-        background: linear-gradient(to right , #7A88FF, #7AFFAF);
-        line-height: 50px;
-        color: #fff;
-        font-size: 24px;
-        text-align: center;
-        border-radius: 8px;
-    }
-    .to{
-      width: 30px;
+    .carinfo .logo{
       height: 30px;
-      background-size: 30px;
+      width: 60px;
+      background-image: url("../image/LC_round.png");
       background-repeat: no-repeat;
-      background-image: url("../image/wangfan.png");
-      background-position: center center;
+      background-position:10px auto;
+      background-size:20px;
     }
-    .highlight {
-        opacity: 0.7;
+    .carinfo .carname{
+      width: 100%;
+      height:30px;
+      line-height: 20px;
+      text-align:left;
+      font-size: 14px;
     }
-    .position{
-        height:60px;
-        line-height: 60px;
-        vertical-align: middle;
+    .carinfo .check{
+      width: 100%;
+      height:30px;
+      line-height: 20px;
+      text-align:right;
+      color: grey;
+      font-size: 14px;
+    }
+    .from-to{
+      -webkit-box-flex: 4;
+      -webkit-flex: 4;
+      flex: 4;
+      margin: 40px 0px;
+    }
+    .from-to .middle{
+      position: relative;
+      height: 91px;
+      width: 100%;
+      background-image: url("../image/travel.png");
+      background-repeat: no-repeat;
+      background-size: 40px 40px;
+      background-position: center;
+    }
+    .from-to .addr{
+      font-size:20px;
+      color:grey;
+    }
+    .from-to .time{
+      font-size:45px;
+    }
+    .from-to .date{
+      font-size:14px;
+      color:grey;
+    }
+    .driver .drivername{
+      text-align: left;
+    }
+    .driver .drivertel{
+      text-align: right;
     }
     </style>
 </head>
 <body>
-  <!--  <div class="empty">订单</div>-->
-    <div class="wrap-col">
-    <div class="wrap-row option item">
-      <div id=source class="source item">出发地</div>
-      <div class="position"><span align="left">上海</span></div>
-      <div class="to item"></div>
-      <div class="position"><span align="right">杭州</span></div>
-      <div id=destination class="destination item">目的地</div>
-    </div>
-    <div class="option wrap-row item">
-      <div class="item icon icon-time"></div>
-      <span class="title item"for="time">时间</span>
-      <div id="time" class="input item input-time" type="text">1/21 08:30</div>
-    </div>
-    <div class="option wrap-row item">
-      <div class="item icon icon-tel"></div>
-      <label class="title item" for="tel">联系电话</label>
-      <div id="tel" class="input item" type="number">135xxxxxxxx</div>
-    </div>
-    <div class="option wrap-row item">
-      <div class="item icon icon-people"></div>
-      <label class="title item" for="people">乘客人数</label>
-      <div id="people" class="input item" type="number">3人</div>
-    </div>
-    <div class="option wrap-row item">
-      <div class="item icon icon-addr"></div>
-      <label class="title item" for="address">详细地址</label>
-      <div id="address" class="input item" type="text">上海市普陀区华东师范大学</div>
-    </div>
-  </div>
-  <script type="text/javascript" src="../script/api.js"></script>
+    <div id="content"></div>
+    <script id="order-template" type="text/html">
+      {{if noneorder}}
+      <div class="noneorder">
+        <div class="icon-no"></div>
+        <div class="text">暂无订单</div>
+      </div>
+      {{else if !noneorder}}
+      <div class="order wrap-col">
+        <div class="carinfo wrap-row item">
+          <div class="logo"></div>
+          <span class="carname">{{carname}}</span>
+          <span class="check" tapmode onclick="fnOpenMyOrderWin()">查看订单&gt;</span>
+        </div>
+        <div class="from-to wrap-row item">
+          <div class="from item">
+            <div class="addr fromaddr" id="fromaddr">{{fromaddr}}</div>
+            <div class="time fromtime" id="fromtime">{{fromtime}}</div>
+            <div class="date fromdate" id="fromdate">{{fromdate}}</div>
+          </div>
+          <div class="middle item"></div>
+          <div class="to item">
+            <div class="addr toaddr" id="toaddr">{{toaddr}}</div>
+            <div class="time totime" id="totime">{{totime}}</div>
+            <div class="date todate" id="todate">{{todate}}</div>
+          </div>
+        </div>
+        <div class="driver wrap-row item">
+          <div class="drivername item">司机:{{drivername}}</div>
+          <div class="drivertel item">联系电话:{{drivertel}}</div>
+        </div>
+      </div>
+      {{/if}}
+    </script>
+    <script>
+    apiready=function(){
+      api.setCustomRefreshHeaderInfo({
+          bgColor : '#f0f0f0',
+      }, function() {
+          //下拉刷新被触发，自动进入加载状态，使用 api.refreshHeaderLoadDone() 手动结束加载中状态
+          setTimeout(function(){
+      api.refreshHeaderLoadDone()
+    }, 1000);
+      });
+    };
+    var data = {
+      noneorder:false,
+      carname:"宝马 沪A66666",
+      fromaddr:"上海",
+      fromtime:"21:00",
+      fromdate:"2019-1-23",
+      toaddr:"杭州",
+      totime:"21:45",
+      todate:"2019-1-23",
+      drivername:"老司机",
+      drivertel:"18977778888"
+    };
+    var html = template('order-template', data); //data为模板数据
+    document.getElementById('content').innerHTML = html; //将生成的模板填充添加到对应的容器中
+    function fnOpenMyOrderWin() {
+        api.openWin({
+            name: 'entireorder',
+            url: './entireorder.html'
+        });
+    }
+    </script>
 </body>
 </html>
