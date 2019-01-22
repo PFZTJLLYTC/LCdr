@@ -7,60 +7,21 @@
     <title>待处理</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css"/>
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/order.css"/>
+    <script src="../script/template-web.js"></script>
     <style>
-    html,body{
-      background-color:rgba(203, 203, 203, 0.17);
-    }
-    .wrap-col{
-      display: -webkit-box;
-      display: -webkit-flex;
-      display: flex;
-      -webkit-box-orient: vertical;
-      -webkit-flex-flow: column;
-      flex-flow: column;
-    }
-    .wrap-row{
-      display: -webkit-box;
-      display: -webkit-flex;
-      display: flex;
-      -webkit-box-orient: horizontal;
-      -webkit-flex-flow: row;
-      flex-flow: row;
-    }
-    .item{
-      -webkit-box-flex: 1;
-      -webkit-flex: 1;
-      flex: 1;
-      margin:auto 0px;
-    }
-    .order{
-      text-align: center;
-      height: auto;
-      margin: 20px 10px;
-      padding:10px;
-      border-color: #fff;
-      border-width: 1px;
-      border-style: groove solid;
-      background:#fff;
-      border-radius: 10px;
-    }
     .info .logo{
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 80px;
-      width: 60px;
+      height: 30px;
+      width: 30px;
       background-image: url("../image/LC_round.png");
       background-repeat: no-repeat;
-      background-position:20px;
-      background-size: auto 20px;
+      background-position:10px auto;
+      background-size:20px;
     }
     .info .mark{
-      position: relative;
-      box-sizing: border-box;
       width: 100%;
-      height:50px;
-      padding-left:25px;
+      height:30px;
+      line-height: 20px;
       text-align:left;
       font-size: 14px;
     }
@@ -68,7 +29,7 @@
       -webkit-box-flex: 4;
       -webkit-flex: 4;
       flex: 4;
-      margin-bottom:30px;
+      margin:20px 0px;
     }
     .from-to .middle{
       position: relative;
@@ -99,32 +60,67 @@
     </style>
 </head>
 <body>
-    <div class="order wrap-col">
-      <div class="info item">
-        <div class="logo"></div>
-        <span class="mark">订单正在处理......</span>
+    <div id="content"></div>
+    <script id="order-template" type="text/html">
+      {{if noneorder}}
+      <div class="noneorder">
+        <div class="icon-no"></div>
+        <div class="text">暂无相关订单</div>
       </div>
-      <div class="from-to wrap-row item">
-        <div class="from item">
-          <div class="addr fromaddr" id="fromaddr">上海</div>
-          <div class="time fromtime" id="fromtime">21:00</div>
-          <div class="date fromdate" id="fromdate">2018-12-30</div>
+      {{else if !noneorder}}
+      <div class="order wrap-col">
+        <div class="info wrap-row item">
+          <div class="logo"></div>
+          <span class="mark">订单正在处理......</span>
         </div>
-        <div class="middle item"></div>
-        <div class="to item">
-          <div class="addr toaddr" id="toaddr">北京</div>
-          <div class="time totime" id="totime">23:30</div>
-          <div class="date todate" id="todate">2018-12-30</div>
-        </div>
-      </div>
-      <div class="passenger wrap-row item">
-        <div class="passengernumber item">乘客数:
-          <span id="people">3人</span>
-        </div>
-        <div class="passengertel item">联系电话:
-          <span id="telnumber">18966667777</span>
+        <div class="from-to wrap-row item">
+          <div class="from item">
+            <div class="addr fromaddr" id="fromaddr">{{fromaddr}}</div>
+            <div class="time fromtime" id="fromtime">{{fromtime}}</div>
+            <div class="date fromdate" id="fromdate">{{fromdate}}</div>
           </div>
+          <div class="middle item"></div>
+          <div class="to item">
+            <div class="addr toaddr" id="toaddr">{{toaddr}}</div>
+            <div class="time totime" id="totime">{{totime}}</div>
+            <div class="date todate" id="todate">{{todate}}</div>
+          </div>
+        </div>
+        <div class="passenger wrap-row item">
+          <div class="passengernumber item">乘客数:
+            <span id="people">{{people}}人</span>
+          </div>
+          <div class="passengertel item">联系电话:
+            <span id="telnumber">{{telnumber}}</span>
+            </div>
+        </div>
       </div>
-    </div>
+      {{/if}}
+    </script>
+    <script>
+    apiready=function(){
+      api.setCustomRefreshHeaderInfo({
+          bgColor : '#f0f0f0',
+      }, function() {
+          //下拉刷新被触发，自动进入加载状态，使用 api.refreshHeaderLoadDone() 手动结束加载中状态
+          setTimeout(function(){
+      api.refreshHeaderLoadDone()
+    }, 1000);
+      });
+    };
+    var data = {
+      noneorder:false,
+      fromaddr:"上海",
+      fromtime:"21:00",
+      fromdate:"2019-1-23",
+      toaddr:"杭州",
+      totime:"21:45",
+      todate:"2019-1-23",
+      people:"3",
+      telnumber:"18988889999"
+    };
+    var html = template('order-template', data); //data为模板数据
+    document.getElementById('content').innerHTML = html; //将生成的模板填充添加到对应的容器中
+    </script>
 </body>
 </html>
