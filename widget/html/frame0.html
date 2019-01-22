@@ -13,13 +13,13 @@
     html,body{
       background-color:rgb(235, 235, 235);
     }
-    .carinfo .logo{
+    .carinfo {
       height: 30px;
-      width: 60px;
-      background-image: url("../image/LC_round.png");
+      width: 100%;
       background-repeat: no-repeat;
       background-position:10px auto;
       background-size:20px;
+      margin:0 10px;
     }
     .carinfo .carname{
       width: 100%;
@@ -40,7 +40,7 @@
       -webkit-box-flex: 4;
       -webkit-flex: 4;
       flex: 4;
-      margin: 40px 0px;
+      margin: 0px;
     }
     .from-to .middle{
       position: relative;
@@ -81,25 +81,21 @@
       {{else if !noneorder}}
       <div class="order wrap-col">
         <div class="carinfo wrap-row item">
-          <div class="logo"></div>
-          <span class="carname">{{carname}}</span>
           <span class="check" tapmode onclick="fnOpenMyOrderWin()">查看订单&gt;</span>
         </div>
         <div class="from-to wrap-row item">
           <div class="from item">
             <div class="addr fromaddr" id="fromaddr">{{fromaddr}}</div>
             <div class="time fromtime" id="fromtime">{{fromtime}}</div>
-            <div class="date fromdate" id="fromdate">{{fromdate}}</div>
           </div>
           <div class="middle item"></div>
           <div class="to item">
             <div class="addr toaddr" id="toaddr">{{toaddr}}</div>
             <div class="time totime" id="totime">{{totime}}</div>
-            <div class="date todate" id="todate">{{todate}}</div>
           </div>
         </div>
         <div class="driver wrap-row item">
-          <div class="drivername item">司机:{{drivername}}</div>
+          <div class="drivername item">乘客数:3人</div>
           <div class="drivertel item">联系电话:{{drivertel}}</div>
         </div>
       </div>
