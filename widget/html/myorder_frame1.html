@@ -4,101 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>待处理</title>
+    <title>已完成</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css"/>
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
     <link rel="stylesheet" type="text/css" href="../css/order.css"/>
     <script src="../script/template-web.js"></script>
     <style>
-    .info .logo{
-      height: 30px;
-      width: 30px;
-      background-image: url("../image/LC_round.png");
-      background-repeat: no-repeat;
-      background-position:10px auto;
-      background-size:20px;
-    }
-    .info .mark{
-      width: 100%;
-      height:30px;
-      line-height: 20px;
-      text-align:left;
-      font-size: 14px;
-    }
-    .from-to{
-      -webkit-box-flex: 4;
-      -webkit-flex: 4;
-      flex: 4;
-      margin:20px 0px;
-    }
-    .from-to .middle{
-      position: relative;
-      height: 91px;
-      width: 100%;
-      background-image: url("../image/travel.png");
-      background-repeat: no-repeat;
-      background-size: 40px 40px;
-      background-position: center;
-    }
-    .from-to .addr{
-      font-size:20px;
-      color:grey;
-    }
-    .from-to .time{
-      font-size:45px;
-    }
-    .from-to .date{
-      font-size:14px;
-      color:grey;
-    }
-    .passenger .passengernumber{
-      text-align: left;
-    }
-    .passenger .passengertel{
-      text-align: right;
-    }
+      .carinfo .logo{
+        height: 30px;
+        width: 30px;
+        background-image: url("../image/LC_round.png");
+        background-repeat: no-repeat;
+        background-position:10px auto;
+        background-size:20px;
+      }
+      .carinfo .carname{
+        width: 100%;
+        height:30px;
+        line-height: 20px;
+        text-align:left;
+        font-size: 14px;
+      }
+      .from-to{
+        margin: 20px 0;
+      }
+      .from-to .middle{
+        width: auto;
+        height: 23px;
+        padding-top:13px;
+        background-image: url("../image/single-arrow.png");
+        background-repeat: no-repeat;
+        background-size: 50px 23px;
+        background-position: center;
+      }
+      .from-to .addr{
+        font-size:20px;
+        color:#000;
+      }
+      .passenger .passengernumber{
+        text-align: left;
+        color: grey;
+      }
+      .passenger .date{
+        text-align: right;
+        color: grey;
+      }
     </style>
 </head>
+
 <body>
-    <div id="content"></div>
-    <script id="order-template" type="text/html">
-      {{if noneorder}}
-      <div class="noneorder">
-        <div class="icon-no"></div>
-        <div class="text">暂无相关订单</div>
-      </div>
-      {{else if !noneorder}}
-      <div class="order wrap-col">
-        <div class="info wrap-row item">
-          <div class="logo"></div>
-          <span class="mark">订单正在处理......</span>
-        </div>
-        <div class="from-to wrap-row item">
-          <div class="from item">
-            <div class="addr fromaddr" id="fromaddr">{{fromaddr}}</div>
-            <div class="time fromtime" id="fromtime">{{fromtime}}</div>
-            <div class="date fromdate" id="fromdate">{{fromdate}}</div>
+  <div id="content"></div>
+  <script id="order-template" type="text/html">
+    {{if noneorder}}
+    <div class="noneorder">
+      <div class="icon-no"></div>
+      <div class="text">暂无相关订单</div>
+    </div>
+    {{else if !noneorder}}
+      {{each list}}
+        <div class="order wrap-col">
+          <div class="carinfo wrap-row item">
+            <div class="logo"></div>
+            <span class="carname">{{$value.carname}}<span>
           </div>
-          <div class="middle item"></div>
-          <div class="to item">
-            <div class="addr toaddr" id="toaddr">{{toaddr}}</div>
-            <div class="time totime" id="totime">{{totime}}</div>
-            <div class="date todate" id="todate">{{todate}}</div>
-          </div>
-        </div>
-        <div class="passenger wrap-row item">
-          <div class="passengernumber item">乘客数:
-            <span id="people">{{people}}人</span>
-          </div>
-          <div class="passengertel item">联系电话:
-            <span id="telnumber">{{telnumber}}</span>
+          <div class="from-to wrap-row item">
+            <div class="from item">
+              <div class="addr fromaddr" id="fromaddr">{{$value.fromaddr}}</div>
             </div>
+            <div class="middle item"></div>
+            <div class="to item">
+              <div class="addr toaddr" id="toaddr">{{$value.toaddr}}</div>
+            </div>
+          </div>
+          <div class="passenger wrap-row item">
+            <div class="passengernumber item">乘客数:{{$value.passengernumber}}</div>
+            <div class="date item">{{$value.date}}</div>
+          </div>
         </div>
-      </div>
-      {{/if}}
-    </script>
-    <script>
-    apiready=function(){
+      {{/each}}
+    {{/if}}
+  </script>
+  <script>
+  apiready=function(){
       api.setCustomRefreshHeaderInfo({
           bgColor : '#f0f0f0',
       }, function() {
@@ -107,20 +94,25 @@
       api.refreshHeaderLoadDone()
     }, 1000);
       });
-    };
-    var data = {
-      noneorder:false,
-      fromaddr:"上海",
-      fromtime:"21:00",
-      fromdate:"2019-1-23",
-      toaddr:"杭州",
-      totime:"21:45",
-      todate:"2019-1-23",
-      people:"3",
-      telnumber:"18988889999"
-    };
-    var html = template('order-template', data); //data为模板数据
-    document.getElementById('content').innerHTML = html; //将生成的模板填充添加到对应的容器中
-    </script>
+  };
+  var data = {
+    noneorder:false,
+    list:[{
+        carname:"宝马 沪A66666",
+        fromaddr:"上海",
+        toaddr:"杭州",
+        passengernumber:"3",
+        date:"2019年1月21日"
+      },{
+        carname:"奔驰 沪B66666",
+        fromaddr:"北京",
+        toaddr:"上海",
+        passengernumber:"4",
+        date:"2019年1月11日"
+      }]
+  };
+  var html = template('order-template', data); //data为模板数据
+  document.getElementById('content').innerHTML = html; //将生成的模板填充添加到对应的容器中
+  </script>
 </body>
 </html>
