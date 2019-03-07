@@ -7,9 +7,9 @@
     <title>订单</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css"/>
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <script src="../script/template-web.js"></script>
     <style>
-        .empty{ text-align: center; padding: 120px 0; }
-        .wrap-row{
+    .wrap-row{
       display: -webkit-box;
       display: -webkit-flex;
       display: flex;
@@ -122,41 +122,105 @@
     </style>
 </head>
 <body>
-  <!--  <div class="empty">订单</div>-->
   <header>
         <ul >
             <li class="border-b active" >完整订单</li>
         </ul>
     </header>
-    <div class="wrap-col">
-    <div class="wrap-row option item">
-      <div id=source class="source item">出发地</div>
-      <div class="position"><span align="left">上海</span></div>
-      <div class="to item"></div>
-      <div class="position"><span align="right">杭州</span></div>
-      <div id=destination class="destination item">目的地</div>
+    <ul id="content"></ul>
+    <script id="order-template" type="text/html">
+      {{if noneorder}}
+      <div class="noneorder">
+        <div class="icon-no"></div>
+        <div class="text">暂无相关订单</div>
+      </div>
+      {{else if !noneorder}}
+      <div class="wrap-col">
+      <div class="wrap-row option item">
+        <div id=source class="source item">出发地</div>
+        <div class="position"><span align="left">{{source}}</span></div>
+        <div class="to item"></div>
+        <div class="position"><span align="right">{{destination}}</span></div>
+        <div id=destination class="destination item">目的地</div>
+      </div>
+      <div class="option wrap-row item">
+        <div class="item icon icon-time"></div>
+        <span class="title item"for="time">时间</span>
+        <div id="time" class="input item input-time" type="text">{{fromtime}}-{{totime}}</div>
+      </div>
+      <div class="option wrap-row item">
+        <div class="item icon icon-tel"></div>
+        <label class="title item" for="tel">联系电话</label>
+        <div id="tel" class="input item" type="number">{{custel}}</div>
+      </div>
+      <div class="option wrap-row item">
+        <div class="item icon icon-people"></div>
+        <label class="title item" for="people">乘客人数</label>
+        <div id="people" class="input item" type="number">{{peoplecount}}人</div>
+      </div>
+      <div class="option wrap-row item">
+        <div class="item icon icon-addr"></div>
+        <label class="title item" for="address">详细地址</label>
+        <div id="address" class="input item" type="text">{{detailaddr}}</div>
+      </div>
     </div>
-    <div class="option wrap-row item">
-      <div class="item icon icon-time"></div>
-      <span class="title item"for="time">时间</span>
-      <div id="time" class="input item input-time" type="text">1/21 08:30</div>
-    </div>
-    <div class="option wrap-row item">
-      <div class="item icon icon-tel"></div>
-      <label class="title item" for="tel">联系电话</label>
-      <div id="tel" class="input item" type="number">135xxxxxxxx</div>
-    </div>
-    <div class="option wrap-row item">
-      <div class="item icon icon-people"></div>
-      <label class="title item" for="people">乘客人数</label>
-      <div id="people" class="input item" type="number">3人</div>
-    </div>
-    <div class="option wrap-row item">
-      <div class="item icon icon-addr"></div>
-      <label class="title item" for="address">详细地址</label>
-      <div id="address" class="input item" type="text">上海市普陀区华东师范大学</div>
-    </div>
-  </div>
+    {{/if}}
+  </script>
   <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/SHA1.js"></script>
+  <script type="text/javascript" src="../script/APICloud-rest.js"></script>
+  <script>
+
+  apiready=function(){
+    fnGetOrder();
+    fnPullRefresh();
+  };
+  var appId="A6096149079402";
+  var appKey="32CFC654-7074-7E4E-38A5-48B190D16721";
+  var userInfo=$api.getStorage("userInfo");
+  var client=new Resource(appId,appKey);
+  function fnGetOrder(){
+    var Model=client.Factory('user');
+    Model.get({
+      "_id":userInfo.userId,
+      "_relation":"orders"
+    },function(ret,err){
+      if(ret){
+        var order;
+        var data={
+            noneorder:true
+          };
+        for(var i=0;i<ret.length;i++){
+          if(ret[i]["status"]=='1')
+          order=ret[i];
+        }
+        if(order){
+          var timearray=order["time"].split(" -- ",2);
+          data = {
+            noneorder:false,
+            source:order["source"],
+            destination:order["destination"],
+            fromtime:timearray[0],
+            totime:timearray[1],
+            peoplecount:order["peoplecount"],
+            custel:   order["custel"],
+            detailaddr: order["detailaddr"]
+          };}
+      }
+      var html = template('order-template', data); //data为模板数据
+      document.getElementById('content').innerHTML = html; //将生成的模板填充添加到对应的容器中
+    });
+  }
+  function fnPullRefresh(){
+      api.setCustomRefreshHeaderInfo({
+          bgColor : '#f0f0f0',
+      }, function() {
+        fnGetOrder();
+        setTimeout(function(){
+          api.refreshHeaderLoadDone();
+        },500);
+      });
+  }
+  </script>
 </body>
 </html>
