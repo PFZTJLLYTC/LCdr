@@ -200,7 +200,7 @@ function getUserInfo() {
         if (ret) {
             var username=$api.byId("username");
             $api.text(username,ret.username);
-            fnUpdateLocalAvatar(ret);
+            //fnUpdateLocalAvatar(ret);
         } else {
             alert(JSON.stringify(err));
         }
