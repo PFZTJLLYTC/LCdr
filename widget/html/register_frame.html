@@ -75,7 +75,7 @@
     </div>
     <div class="row wrap-row">
         <label for="line" class="tag">注册路线：</label>
-        <input id="line" class="input" type="password">
+        <input id="line" class="input" type="text">
     </div>
     <div class="row wrap-row">
         <label for="phone" class="tag">手机号：</label>
@@ -83,10 +83,11 @@
     </div>
     <div class="row wrap-row">
         <label for="carNum" class="tag">密码：</label>
-        <input id="password" class="input" type="text">
+        <input id="password" class="input" type="password">
     </div>
     <div class="btn" tapmode="highlight" onclick="fnRegister()">注册</div>
     <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript">
     apiready=function(){
 
@@ -109,7 +110,7 @@
 
 
       api.ajax({
-          url: 'http://118.24.96.45:8080/drivers/register',
+          url: url+'/driver/register',
           method: 'post',
           headers: {
                'Content-Type': 'application/json;charset=utf-8'
@@ -125,7 +126,8 @@
             }
           }
       }, function(ret, err) {
-        if (ret.data) {
+        alert(JSON.stringify(ret));
+        if (ret.code=='0') {
             api.alert({
                 title: '提示',
                 msg: '注册成功',
