@@ -107,10 +107,10 @@
       carNumValue=$api.val($api.byId("carNum"));
       phoneValue=$api.val($api.byId("phone"));
       lineValue=$api.val($api.byId("line"));
-
+      passwordValue=$api.val($api.byId("password"));
 
       api.ajax({
-          url: url+'/driver/register',
+          url: 'http://'+url+':'+port+'/driver/register',
           method: 'post',
           headers: {
                'Content-Type': 'application/json;charset=utf-8'
@@ -126,7 +126,8 @@
             }
           }
       }, function(ret, err) {
-        alert(JSON.stringify(ret));
+        // alert(JSON.stringify(ret));
+        // alert(JSON.stringify(err));
         if (ret.code=='0') {
             api.alert({
                 title: '提示',

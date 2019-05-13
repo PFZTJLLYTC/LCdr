@@ -52,7 +52,7 @@
         <div class="order wrap-col">
           <div class="carinfo wrap-row item">
             <div class="logo"></div>
-            <span class="carname">{{$value.carname}}<span>
+            <span class="carname">{{$value.carNum}}<span>
           </div>
           <div class="from-to wrap-row item">
             <div class="from item">
@@ -64,7 +64,7 @@
             </div>
           </div>
           <div class="passenger wrap-row item">
-            <div class="passengernumber item">乘客数:{{$value.peoplecount}}</div>
+            <div class="passengernumber item">乘客数:{{$value.userCount}}</div>
             <div class="date item">{{$value.date}}</div>
           </div>
         </div>
@@ -74,6 +74,7 @@
   </script>
   <script type="text/javascript" src="../script/api.js"></script>
   <script type="text/javascript" src="../script/SHA1.js"></script>
+  <script type="text/javascript" src="../script/common.js"></script>
   <script type="text/javascript" src="../script/APICloud-rest.js"></script>
   <script>
     apiready=function(){
@@ -86,7 +87,7 @@
 
     function fnGetOrder(){
       api.ajax({
-          url: url+'/driver/orders/done'+"?userId="+userInfo.userId,
+          url: 'http://'+url+':'+port+'/driver/orders/done'+"?userId="+userInfo.dnum,
           method: 'get',
           headers: {
                 'Content-Type': 'application/json;charset=utf-8'

@@ -230,21 +230,23 @@
 
 
         api.ajax({
-            url: url+'/driver/login',
+            url: 'http://'+url+':'+port+'/driver/login',
             method: 'post',
             headers: {
                  'Content-Type': 'application/json;charset=utf-8'
             },
             data:{
               body:{
-                "username":usernameValue,
+                "dnum":usernameValue,
                 "password":passwordValue
               }
             }
         }, function(ret, err) {
-          if (ret) {
+          alert(JSON.stringify(ret));
+          alert(JSON.stringify(err));
+          if (ret.data) {
               // 保存用户信息
-              $api.setStorage('userInfo', ret);
+              $api.setStorage('userInfo', ret.data);
               api.openWin({
                   name: 'index',
                   url: '../index.html',
