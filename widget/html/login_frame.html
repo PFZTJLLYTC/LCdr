@@ -244,7 +244,7 @@
         }, function(ret, err) {
           alert(JSON.stringify(ret));
           alert(JSON.stringify(err));
-          if (ret.data) {
+          if (ret.code==0) {
               // 保存用户信息
               $api.setStorage('userInfo', ret.data);
               api.openWin({
