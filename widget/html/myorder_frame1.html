@@ -39,7 +39,6 @@
 
 <body>
   <ul id="content"></ul>
-  <script type="text/javascript" src="../script/api.js"></script>
   <script id="order-template" type="text/html">
     {{if noneorder}}
     <div class="noneorder">
@@ -73,9 +72,7 @@
     {{/if}}
   </script>
   <script type="text/javascript" src="../script/api.js"></script>
-  <script type="text/javascript" src="../script/SHA1.js"></script>
   <script type="text/javascript" src="../script/common.js"></script>
-  <script type="text/javascript" src="../script/APICloud-rest.js"></script>
   <script>
     apiready=function(){
       fnGetOrder();
@@ -87,13 +84,13 @@
 
     function fnGetOrder(){
       api.ajax({
-          url: 'http://'+url+':'+port+'/driver/orders/done'+"?userId="+userInfo.dnum,
+          url: 'http://'+url+':'+port+'/driver/orders/done?dnum='+userInfo.dnum,
           method: 'get',
           headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             }
       }, function(ret, err) {
-        if(ret.code == 0){
+        if(ret.data){
           data = {
              noneorder:false,
              list:ret.data

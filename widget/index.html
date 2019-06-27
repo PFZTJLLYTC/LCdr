@@ -108,8 +108,6 @@
           //连接成功建立的回调方法
           websocket.onopen=function(){
           console.log('连接建立');
-
-          //测试用
           api.alert({
                    title: '订单提醒',
                    msg: '您有新的订单了',
@@ -117,12 +115,12 @@
                      if(ret){
                        api.openWin({
                            name: 'message',
-                           url: './html/message.html'
+                           url: './html/message.html',
+                          //  pageParam:event.data,
                        });
                      }
                    });
           };
-
 
           //连接关闭的回调方法
           websocket.onclose=function(){

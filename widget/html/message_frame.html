@@ -70,7 +70,7 @@
         line-height: 30px;
     }
 
-    .list .message .tag .arrow {
+    .list .message .tag .del {
         position: absolute;
         box-sizing: border-box;
         padding-right: 16px;
@@ -80,7 +80,7 @@
         text-align: right;
         font-size: 10px;
         line-height: 30px;
-        background-image: url(../image/arrow_right.png);
+        background-image: url(../image/del.png);
         background-repeat: no-repeat;
         background-size: 10px 16px;
         background-position: right center;
@@ -93,33 +93,70 @@
 </head>
 
 <body>
-    <section id="list" class="list">
+  <ul id="list" class="list"></ul>
 
-        <div class="message" tapmode="highlight">
+  <script id="message-template" type="text/html">
+    {{if nomessage}}
+      <li>暂无消息</li>
+    {{else if !nomessage}}
+      {{each list}}
+        <li class="message" tapmode="highlight">
             <div class="type">出行提醒</div>
-            <div class="content">【连城】尊敬的客户，您的行程状态有更新，快去看看吧~！</div>
+            <div class="content">【连城】{{$value.message}}</div>
             <div class="tag">
-                <div class="time">2016-02-26 12:02:08</div>
-                <div class="arrow">查看详情</div>
+                <div class="time">{{$value.createTime}}</div>
+                <div class="del">删除消息</div>
             </div>
-        </div>
+        </li>
+      {{/each}}
+    {{/if}}
+  </script>
+    <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/common.js"></script>
+    <script type="text/javascript">
+    apiready = function() {
+        fnGetMessages();
+        fnPullRefresh();
+    };
 
-        <div class="message" tapmode="highlight">
-            <div class="type">出行提醒</div>
-            <div class="content">【连城】尊敬的客户，您的行程状态有更新，快去看看吧~！</div>
-            <div class="tag">
-                <div class="time">2016-02-25 11:30:33</div>
-                <div class="arrow">查看详情</div>
-            </div>
-        </div>
+    var userInfo=$api.getStorage("userInfo");
+    var data={'nomessage':true};
 
-    </section>
+    function fnGetMessages(){
+      api.ajax({
+          url: 'http://'+url+':'+port+'/driver/messages/findMessages?dnum='+userInfo.dnum,
+          method: 'get',
+          headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+      }, function(ret, err) {
+        console.log(JSON.stringify(ret));
+        if(ret.data){
+          data={
+            'nomessage':false,
+            'list':ret.data
+          };
+        }
+          console.log(JSON.stringify(data));
+          var html = template('message-template', data); //data为模板数据
+          document.getElementById('list').innerHTML = html; //将生成的模板填充添加到对应的容器中
+        });
+    }
+
+    function fnPullRefresh(){
+        api.setCustomRefreshHeaderInfo({
+            bgColor : '#f0f0f0',
+        }, function() {
+            fnGetMessages();
+            setTimeout(
+              function(){
+                api.refreshHeaderLoadDone();
+              },500);
+        });
+    }
+
+
+
+    </script>
 </body>
-<script type="text/javascript" src="../script/api.js"></script>
-<script type="text/javascript">
-apiready = function() {
-
-};
-</script>
-
 </html>
