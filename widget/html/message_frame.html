@@ -124,9 +124,9 @@
       <li>暂无消息</li>
     {{else if !nomessage}}
       {{each list}}
-        <li class="message" tapmode="highlight">
+        <li id="li-{{$value.id}}" class="message" tapmode="highlight">
             <div class="type">出行提醒
-              <span class="del hide" tapmode onclick="fnDel({{$value.id}},{{$index}});">删除消息</span>
+              <span class="del hide" tapmode onclick="fnDel({{$value.id}});">删除消息</span>
             </div>
             <div class="content">【连城】{{$value.message}}</div>
             <div class="tag">
@@ -158,10 +158,14 @@
             }
       }, function(ret, err) {
         console.log(JSON.stringify(ret));
-        if(ret.data){
+        if(ret.data.length>0){
           data={
             'nomessage':false,
             'list':ret.data
+          };
+        }else{
+          data={
+            'nomessage':true
           };
         }
           console.log(JSON.stringify(data));
@@ -198,6 +202,8 @@
           if( ret ){
             console.log(JSON.stringify(ret));
             if(ret.buttonIndex===1){
+              var li=document.getElementById('li-'+id);
+              list.removeChild(li);
               api.ajax({
                   url: 'http://'+url+':'+port+'/driver/messages/delete/'+id,
                   method: 'post',
@@ -207,7 +213,7 @@
               },function(ret, err){
                   if (ret) {
                     console.log(JSON.stringify(ret));
-                    list.removeChild(list.children[index]);
+
                   } else {
                     console.log(JSON.stringify(err));
                   }
