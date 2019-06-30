@@ -80,7 +80,7 @@
         text-align: right;
         font-size: 10px;
         line-height: 30px;
-        background-image: url(../image/del.png);
+        color: red;
         background-repeat: no-repeat;
         background-size: 10px 16px;
         background-position: right center;
@@ -105,7 +105,7 @@
             <div class="content">【连城】{{$value.message}}</div>
             <div class="tag">
                 <div class="time">{{$value.createTime}}</div>
-                <div class="del">删除消息</div>
+                <div class="del" tapmode="highlight" onclick="fnDel({{$value.id}},{{$index}});">删除消息</div>
             </div>
         </li>
       {{/each}}
@@ -121,6 +121,7 @@
 
     var userInfo=$api.getStorage("userInfo");
     var data={'nomessage':true};
+    var list= document.getElementById('list');
 
     function fnGetMessages(){
       api.ajax({
@@ -139,7 +140,7 @@
         }
           console.log(JSON.stringify(data));
           var html = template('message-template', data); //data为模板数据
-          document.getElementById('list').innerHTML = html; //将生成的模板填充添加到对应的容器中
+          list.innerHTML = html; //将生成的模板填充添加到对应的容器中
         });
     }
 
@@ -155,6 +156,37 @@
         });
     }
 
+
+    function fnDel(id,index){
+      api.confirm({
+          title: '删除消息',
+          msg: '确定删除该条消息吗？',
+          buttons: ['确定', '取消']
+      }, function(ret, err){
+          if( ret ){
+            console.log(JSON.stringify(ret));
+            api.ajax({
+                url: 'http://'+url+':'+port+'/driver/messages/delete/'+id,
+                method: 'post',
+                headers: {
+                      'Content-Type': 'application/json;charset=utf-8'
+                  }
+            },function(ret, err){
+                if (ret) {
+                  console.log(JSON.stringify(ret));
+
+                  list.removeChild(list.children[index]);
+                } else {
+                  console.log(JSON.stringify(err));
+                }
+            });
+          }else{
+                  console.log(JSON.stringify(err));
+          }
+      });
+
+
+    }
 
 
     </script>
