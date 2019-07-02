@@ -6,6 +6,7 @@
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
     <title>我</title>
     <link rel="stylesheet" type="text/css" href="../css/aui.css"/>
+    <script src="../script/template-web.js"></script>
     <style>
     header {
         height: 40px;
@@ -123,10 +124,14 @@
 </head>
 
 <body>
+    <div id="content"></div>
+    <script id="account-template" type="text/html">
     <header>
-
-        <!--<div id="username" class="username"></div> !-->
-        <div class="account-info">本月订单数：0 <span class="separator">|</span>收入：￥0</div>
+        <div class="account-info">
+          今日订单数：{{todayOrders}}
+          <span class="separator">|</span>
+          今日载客量：{{todayUsers}}
+        </div>
     </header>
     <section>
         <div class="option" tapmode onclick="fnOpenMyOrderWin();">
@@ -140,16 +145,19 @@
             <div class="icon icon-status"></div>
             <div class="title">当前状态</div>
             <div class="arrow-panel">
+              <!-- 设置后台获取的默认值 -->
                 <div class="text1" >
-                    <select class="text">
-                        <option value="b" >休息中</option>
-                         <option value="o">在路上</option>
-                        <option value="o">待出行</option>
+                    <select id="statusSelect" autocomplete="off" class="text" onchange="fnChangeStatus();">
+                         <option id="option-0" value="0">休息中</option>
+                         <option id="option-1" value="1">在路上</option>
+                         <option id="option-2" value="2">待出行</option>
+                         <option id="option-3" value="3">待返程</option>
                      </select>
                 </div>
             </div>
         </div>
-        <div class="option" tapmode onclick="fnOpenInformationWin();">
+        <!-- 司机信息传入个人信息页面 -->
+        <div class="option" tapmode onclick="fnOpenInformationWin({{myInfo}});">
             <div class="icon icon-information"></div>
             <div class="title">我的信息</div>
             <div class="arrow-panel">
@@ -171,77 +179,141 @@
             </div>
         </div>
     </section>
-</body>
-<script type="text/javascript" src="../script/api.js"></script>
-<script type="text/javascript" src="../script/SHA1.js"></script>
-<script type="text/javascript" src="../script/common.js"></script>
-<script type="text/javascript">
-/*初始化得到用户信息*/
-apiready = function() {
-    getUserInfo();
-};
+    </script>
+    <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/common.js"></script>
+    <script type="text/javascript">
+    /*初始化得到用户信息*/
+    apiready = function() {
+        getDriverInfo();
+        fnPullRefresh();
+    };
 
-var appId="A6096149079402";
-var appKey="32CFC654-7074-7E4E-38A5-48B190D16721";
-var now=Date.now();
-var appCode=SHA1(appId+"UZ"+appKey+"UZ"+now)+"."+now;
-
-// 获取个人信息
-function getUserInfo() {
     var userInfo = $api.getStorage('userInfo');
-    api.ajax({
-        url: 'https://d.apicloud.com/mcm/api/user/' + userInfo.userId,
-        method: 'get',
-        headers: {
-            "X-APICloud-AppId":appId,
-            "X-APICloud-AppKey":appCode,
-            "Authorization": userInfo.id
-        }
-    }, function(ret, err) {
-        if (ret) {
-            var username=$api.byId("username");
-            $api.text(username,ret.username);
-            //fnUpdateLocalAvatar(ret);
-        } else {
-            alert(JSON.stringify(err));
-        }
-    });
-}
+    var data;
+    // 获取个人信息
+    function getDriverInfo() {
+
+        api.ajax({
+            url: 'http://'+url+':'+port+'/driver/accountInfo/'+userInfo.dnum,
+            method: 'get',
+            headers: {
+                  'Content-Type': 'application/json;charset=utf-8'
+              }
+        }, function(ret, err) {
+          if(ret){
+            console.log(JSON.stringify(ret));
+            if(ret.data){
+
+              data={
+                todayOrders:ret.data.todayOrders,
+                todayUsers:ret.data.todayUsers,
+                myInfo:{
+                  name:ret.data.name,
+                  dnum:ret.data.dnum,
+                  carNum:ret.data.carNum
+                }
+              };
+              var html = template('account-template', data); //data为模板数据
+              document.getElementById('content').innerHTML = html; //将生成的模板填充添加到对应的容器中
+              $api.attr($api.byId('option-'+ret.data.status),"selected",true);
+            }
+          }else{
+            console.log(JSON.stringify(err));
+          }
+        });
+    }
+
+    function fnChangeStatus(){
+
+       api.ajax({
+           url: 'http://'+url+':'+port+'/driver/changeStatus/'+userInfo.dnum,
+           method: 'post',
+           data: {
+             values:{
+               status:$api.byId("statusSelect").selectedIndex,
+             },
+           }
+       },function(ret, err){
+           if (ret) {
+               console.log( JSON.stringify( ret ) );
+               if(ret.code==0){
+                 api.toast({
+                     msg: '修改状态成功',
+                     duration: 2000,
+                     location: 'middle'
+                 });
+               }else{
+                 api.toast({
+                     msg: '修改状态失败',
+                     duration: 2000,
+                     location: 'middle'
+                 });
+               }
+
+           } else {
+               console.log( JSON.stringify( err ) );
+               api.toast({
+                   msg: '异常错误',
+                   duration: 2000,
+                   location: 'middle'
+               });
+           }
+       });
+
+    }
+
+    function fnPullRefresh(){
+        api.setCustomRefreshHeaderInfo({
+            bgColor : '#f0f0f0',
+        }, function() {
+            getDriverInfo();
+            setTimeout(
+              function(){
+                api.refreshHeaderLoadDone();
+              },500);
+        });
+    }
 
 
 
-// 打开我的订单Window
-function fnOpenMyOrderWin() {
-    api.openWin({
-        name: 'myorder',
-        url: './myorder.html'
-    });
-}
+    // 打开我的订单Window
+    function fnOpenMyOrderWin() {
+        api.openWin({
+            name: 'myorder',
+            url: './myorder.html'
+        });
+    }
 
 
-// 打开信息Window
-function fnOpenInformationWin() {
-    api.openWin({
-        name: 'information',
-        url: './information.html'
-    });
-}
+    // 打开信息Window
+    function fnOpenInformationWin(myInfo) {
+        api.openWin({
+            name: 'information',
+            url: './information.html',
+            pageParam: {
+                dataSource:myInfo
+            }
+        });
 
-// 打开客服Window
-function fnOpenqusAndAnsWin() {
-    api.openWin({
-        name: 'qusAndAns',
-        url: './qusAndAns.html'
-    });
-}
 
-// 打开关于Window
-function fnOpenaboutUsWin() {
-    api.openWin({
-        name: 'aboutUs',
-        url: './aboutUs.html'
-    });
-}
-</script>
+    }
 
+    // 打开客服Window
+    function fnOpenqusAndAnsWin() {
+        api.openWin({
+            name: 'qusAndAns',
+            url: './qusAndAns.html'
+        });
+    }
+
+    // 打开关于Window
+    function fnOpenaboutUsWin() {
+        api.openWin({
+            name: 'aboutUs',
+            url: './aboutUs.html'
+        });
+    }
+    </script>
+</body>
 </html>
