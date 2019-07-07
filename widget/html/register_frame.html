@@ -7,6 +7,7 @@
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
     <title>注册Frame</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <script src="../script/template-web.js"></script>
     <style>
     .row {
         width: auto;
@@ -39,6 +40,18 @@
         outline: none;
         font-size: 16px;
     }
+    .select{
+      width: 100%;
+      height: 20px;
+      line-height: 20px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      background-color: white;
+    }
+
+    input,select{vertical-align: middle;}
+
     .btn {
         width: 200px;
         height: 50px;
@@ -61,44 +74,90 @@
 </head>
 
 <body>
-    <div class="row wrap-row">
-        <label for="name" class="tag">姓名：</label>
-        <input id="name" class="input" type="text">
-    </div>
-    <div class="row wrap-row">
-        <label for="birthday" class="tag">出生日期：</label>
-        <input id="birthday" class="input" type="date">
-    </div>
-    <div class="row wrap-row">
-        <label for="carNum" class="tag">车牌号：</label>
-        <input id="carNum" class="input" type="text">
-    </div>
-    <div class="row wrap-row">
-        <label for="line" class="tag">注册路线：</label>
-        <input id="line" class="input" type="text">
-    </div>
-    <div class="row wrap-row">
-        <label for="phone" class="tag">手机号：</label>
-        <input id="phone" class="input" type="text">
-    </div>
-    <div class="row wrap-row">
-        <label for="carNum" class="tag">密码：</label>
-        <input id="password" class="input" type="password">
-    </div>
-    <div class="btn" tapmode="highlight" onclick="fnRegister()">注册</div>
+    <div id="content"></div>
+
+
+    <script id="option-template" type="text/html">
+      <div class="row wrap-row">
+          <label for="phone" class="tag">手机号码：</label>
+          <input id="phone" class="input" type="text">
+      </div>
+
+      <div class="row wrap-row">
+          <label for="carNum" class="tag">密&#12288;&#12288;码：</label>
+          <input id="password" class="input" type="password">
+      </div>
+
+      <div class="row wrap-row">
+          <label for="name" class="tag">姓&#12288;&#12288;名：</label>
+          <input id="name" class="input" type="text">
+      </div>
+
+      <div class="row wrap-row">
+          <label for="carNum" class="tag">车牌号码：</label>
+          <input id="carNum" class="input" type="text">
+      </div>
+
+      <div class="row wrap-row">
+          <label for="birthday" class="tag">出生日期：</label>
+          <input id="birthday" class="input" type="date">
+      </div>
+
+      <div class="row wrap-row">
+          <span for="line" class="tag">注册路线：</span>
+          <select id="line" class="select">
+            <option value="" hidden></option>
+            {{each list}}
+              <option value="{{$value}}">{{$value}}</option>
+            {{/each}}
+          </select>
+      </div>
+
+      <div class="row wrap-row">
+          <label for="seatType" class="tag">可载客数：</label>
+          <select id="seatType" class="select">
+            <option value="" hidden></option>
+            <option value="0">4座</option>
+            <option value="1">7座</option>
+          </select>
+      </div>
+      <div class="btn" tapmode="highlight" onclick="fnRegister()">注册</div>
+    </script>
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript">
     apiready=function(){
-
+      fnInit();
     };
 
     var nameValue;
     var birthdayValue;
     var carNumValue;
     var phoneValue;
-    var lineValue;
+    var lineNameValue;
     var passwordValue;
+    var seatTypeValue;
+
+    function fnInit(){
+      api.ajax({
+          url: 'http://'+url+':'+port+'/driver/lines/all',
+          method: 'get',
+          headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+      },function(ret, err){
+          if (ret) {
+              console.log( JSON.stringify( ret ) );
+              var data={
+                list:ret.data
+              }
+              var html = template('option-template', data); //data为模板数据
+              document.getElementById('content').innerHTML = html; //将生成的模板填充添加到对应的容器中
+          } else {
+              console.log( JSON.stringify( err ) );
+          }
+      });
+    }
 
     function fnRegister(){
 
@@ -108,6 +167,7 @@
       phoneValue=$api.val($api.byId("phone"));
       lineValue=$api.val($api.byId("line"));
       passwordValue=$api.val($api.byId("password"));
+      seatTypeValue=$api.val($api.byId("seatType"));
 
       api.ajax({
           url: 'http://'+url+':'+port+'/driver/register',
@@ -122,7 +182,8 @@
               "name":nameValue,
               "birthday":birthdayValue,
               "carNum":carNumValue,
-              "lineName":lineValue
+              "lineName":lineValue,
+              "seatType":seatTypeValue,
             }
           }
       }, function(ret, err) {

@@ -101,25 +101,13 @@
     }
 
     var websocket=null;
-    var lineId=1;
+    var lineId=$api.getStorage('userInfo').lineId;
     function fnwebsocket(){
       if('WebSocket' in window){
          websocket=new WebSocket('ws://'+url+':'+port+'/webSocket/'+lineId);
           //连接成功建立的回调方法
           websocket.onopen=function(){
           console.log('连接建立');
-          api.alert({
-                   title: '订单提醒',
-                   msg: '您有新的订单了',
-                   }, function(ret, err) {
-                     if(ret){
-                       api.openWin({
-                           name: 'message',
-                           url: './html/message.html',
-                          //  pageParam:event.data,
-                       });
-                     }
-                   });
           };
 
           //连接关闭的回调方法
@@ -167,7 +155,7 @@
                     name: 'frame'+i,
                     url: './html/frame'+i+'.html',
                     bgColor : 'rgba(0,0,0,.2)',
-                    bounces:true
+                    bounces:false
                 } )
         }
         api.openFrameGroup({

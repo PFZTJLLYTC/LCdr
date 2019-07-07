@@ -59,6 +59,10 @@
     .option .icon-status {
         background-image: url(../image/status.png);
     }
+
+    .option .icon-availableSeats{
+      background-image: url(../image/availableSeats.png);
+    }
     .option .icon-information {
         background-image: url(../image/information.png);
     }
@@ -156,6 +160,28 @@
                 </div>
             </div>
         </div>
+
+        <div class="option">
+            <div class="icon icon-availableSeats"></div>
+            <div class="title">可用座位</div>
+            <div class="arrow-panel">
+              <!-- 设置后台获取的默认值 -->
+                <div class="text1" >
+                    <select id="availableSeatsSelect" class="text" onchange="fnChangeAvailableSeats();">
+                         <option id="seat-0" value="0">0</option>
+                         <option id="seat-1" value="1">1</option>
+                         <option id="seat-2" value="2">2</option>
+                         <option id="seat-3" value="3">3</option>
+                         <option id="seat-4" value="4">4</option>
+                         {{if seatType}}
+                         <option id="seat-5" value="5">5</option>
+                         <option id="seat-6" value="6">6</option>
+                         <option id="seat-7" value="7">7</option>
+                         {{/if}}
+                     </select>
+                </div>
+            </div>
+        </div>
         <!-- 司机信息传入个人信息页面 -->
         <div class="option" tapmode onclick="fnOpenInformationWin({{myInfo}});">
             <div class="icon icon-information"></div>
@@ -186,7 +212,6 @@
     /*初始化得到用户信息*/
     apiready = function() {
         getDriverInfo();
-        fnPullRefresh();
     };
 
     var userInfo = $api.getStorage('userInfo');
@@ -211,12 +236,15 @@
                 myInfo:{
                   name:ret.data.name,
                   dnum:ret.data.dnum,
-                  carNum:ret.data.carNum
-                }
+                  carNum:ret.data.carNum,
+                },
+                seatType:ret.data.seatType,
               };
               var html = template('account-template', data); //data为模板数据
               document.getElementById('content').innerHTML = html; //将生成的模板填充添加到对应的容器中
               $api.attr($api.byId('option-'+ret.data.status),"selected",true);
+              $api.attr($api.byId('seat-'+ret.data.availableSeats),"selected",true);
+
             }
           }else{
             console.log(JSON.stringify(err));
@@ -227,10 +255,11 @@
     function fnChangeStatus(){
 
        api.ajax({
-           url: 'http://'+url+':'+port+'/driver/changeStatus/'+userInfo.dnum,
-           method: 'post',
+           url: 'http://'+url+':'+port+'/driver/switchStatus',
+           method: 'put',
            data: {
              values:{
+               dnum:userInfo.dnum,
                status:$api.byId("statusSelect").selectedIndex,
              },
            }
@@ -254,7 +283,7 @@
            } else {
                console.log( JSON.stringify( err ) );
                api.toast({
-                   msg: '异常错误',
+                   msg: err.msg,
                    duration: 2000,
                    location: 'middle'
                });
@@ -263,16 +292,42 @@
 
     }
 
-    function fnPullRefresh(){
-        api.setCustomRefreshHeaderInfo({
-            bgColor : '#f0f0f0',
-        }, function() {
-            getDriverInfo();
-            setTimeout(
-              function(){
-                api.refreshHeaderLoadDone();
-              },500);
-        });
+    function fnChangeAvailableSeats(){
+      api.ajax({
+          url: 'http://'+url+':'+port+'/driver/changeAvailableSeats',
+          method: 'put',
+          data: {
+            values:{
+              seats:$api.byId("availableSeatsSelect").selectedIndex,
+              dnum:userInfo.dnum
+            },
+          }
+      },function(ret, err){
+          if (ret) {
+              console.log( JSON.stringify( ret ) );
+              if(ret.code==0){
+                api.toast({
+                    msg: '修改成功',
+                    duration: 2000,
+                    location: 'middle'
+                });
+              }else{
+                api.toast({
+                    msg: '修改失败',
+                    duration: 2000,
+                    location: 'middle'
+                });
+              }
+
+          } else {
+              console.log( JSON.stringify( err ) );
+              api.toast({
+                  msg: err.msg,
+                  duration: 2000,
+                  location: 'middle'
+              });
+          }
+      });
     }
 
 
