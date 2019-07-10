@@ -10,30 +10,31 @@
     <link rel="stylesheet" type="text/css" href="../css/order.css"/>
     <script src="../script/template-web.js"></script>
     <style>
-      .from-to{
-        margin: 20px 0;
-      }
-      .from-to .middle{
-        width: auto;
-        height: 23px;
-        padding-top:13px;
-        background-image: url("../image/single-arrow.png");
-        background-repeat: no-repeat;
-        background-size: 50px 23px;
-        background-position: center;
-      }
-      .from-to .addr{
-        font-size:20px;
-        color:#000;
-      }
-      .passenger .passengernumber{
-        text-align: left;
-        color: grey;
-      }
-      .passenger .date{
-        text-align: right;
-        color: grey;
-      }
+    .from-to{
+      margin: 20px 0;
+    }
+    .from-to .middle{
+      width: auto;
+      height: 23px;
+      padding-top:13px;
+      background-image: url("../image/single-arrow.png");
+      background-repeat: no-repeat;
+      background-size: 50px 23px;
+      background-position: center;
+    }
+    .from-to .addr{
+      font-size:20px;
+      color:#000;
+    }
+    .wrap-row .tag{
+      text-align: left;
+    }
+
+    .wrap-row .text{
+      text-align: right;
+      color: grey;
+    }
+
     </style>
 </head>
 
@@ -45,9 +46,9 @@
       <div class="icon-no"></div>
       <div class="text">暂无相关订单</div>
     </div>
-    {{else if !noneorder}}
+    {{else}}
       {{each list}}
-      <li>
+      <li id="{{$value.orderId}}">
         <div class="order wrap-col">
           <div class="carinfo wrap-row item">
             <div class="logo"></div>
@@ -62,10 +63,12 @@
               <div class="addr toaddr" id="toaddr">{{$value.destination}}</div>
             </div>
           </div>
-          <div class="passenger wrap-row item">
-            <div class="passengernumber item">乘客数:{{$value.userCount}}</div>
-            <div class="date item">{{$value.date}}</div>
+
+          <div class="item wrap-row">
+            <span class="tag item">乘客人数:</span>
+            <span class="text item">{{$value.userCount}}</span>
           </div>
+
         </div>
       </li>
       {{/each}}
@@ -84,17 +87,24 @@
 
     function fnGetOrder(){
       api.ajax({
-          url: 'http://'+url+':'+port+'/driver/orders/done?dnum='+userInfo.dnum,
+          url: 'http://'+url+':'+port+'/driver/orders/done',
           method: 'get',
           headers: {
                 'Content-Type': 'application/json;charset=utf-8'
-            }
+            },
+          data:{
+            values:{
+              dnum:userInfo.dnum,
+            },
+          },
       }, function(ret, err) {
-        if(ret.data){
+        if(ret.data.length!=0){
           data = {
              noneorder:false,
              list:ret.data
            };
+        }else{
+          data={noneorder:true};
         }
         var html = template('order-template', data); //data为模板数据
         document.getElementById('content').innerHTML = html; //将生成的模板填充添加到对应的容器中

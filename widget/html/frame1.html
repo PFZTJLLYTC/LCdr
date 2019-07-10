@@ -256,7 +256,7 @@
 
        api.ajax({
            url: 'http://'+url+':'+port+'/driver/switchStatus',
-           method: 'put',
+           method: 'post',
            data: {
              values:{
                dnum:userInfo.dnum,
@@ -295,7 +295,7 @@
     function fnChangeAvailableSeats(){
       api.ajax({
           url: 'http://'+url+':'+port+'/driver/changeAvailableSeats',
-          method: 'put',
+          method: 'post',
           data: {
             values:{
               seats:$api.byId("availableSeatsSelect").selectedIndex,

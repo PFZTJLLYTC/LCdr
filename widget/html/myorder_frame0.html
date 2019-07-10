@@ -10,37 +10,53 @@
     <link rel="stylesheet" type="text/css" href="../css/order.css"/>
     <script src="../script/template-web.js"></script>
     <style>
+    .carinfo .logo{
+      width: 60px;
+    }
+
     .from-to{
-      -webkit-box-flex: 4;
-      -webkit-flex: 4;
-      flex: 4;
-      margin: 20px 0px;
+      margin: 20px 0;
     }
     .from-to .middle{
-      position: relative;
-      height: 91px;
-      width: 100%;
+      width: auto;
+      height: 23px;
+      padding-bottom: 13px;
       background-image: url("../image/travel.png");
       background-repeat: no-repeat;
-      background-size: 40px 40px;
-      background-position: center;
+      background-size: 30px 23px;
+      background-position: top center;
     }
     .from-to .addr{
       font-size:20px;
-      color:grey;
+      line-height: 20px;
     }
-    .from-to .time{
-      font-size:45px;
-    }
-    .from-to .date{
-      font-size:14px;
-      color:grey;
-    }
-    .passenger .passengernumber{
+
+    .wrap-row .tag{
       text-align: left;
     }
-    .passenger .passengertel{
+
+    .wrap-row .text{
       text-align: right;
+      color: grey;
+    }
+
+    .call{
+      -webkit-box-flex: 4;
+      -webkit-flex: 4;
+      flex: 4;
+    }
+
+    .call-text{
+      width: 100%;
+      text-align: right;
+      color: blue;
+    }
+
+    .call-icon{
+      background-image: url("../image/tel.png");
+      background-position: top right;
+      background-repeat: no-repeat;
+      background-size: 20px 20px;
     }
     </style>
 </head>
@@ -52,35 +68,64 @@
        <div class="icon-no"></div>
        <div class="text">暂无相关订单</div>
      </div>
-     {{else if !noneorder}}
-     <div class="order wrap-col">
-       <div class="carinfo wrap-row item">
-         <div class="logo"></div>
-         <span class="carname">{{carinfo}}</span>
-       </div>
-       <div class="from-to wrap-row item">
-         <div class="from item">
-           <div class="addr fromaddr">{{source}}</div>
-           <div class="time fromtime">{{fromtime}}</div>
-           <div class="date fromdate">{{date}}</div>
+     {{else}}
+       {{each list}}
+       <div class="order wrap-col">
+         <div class="carinfo wrap-row item">
+           <div class="logo"></div>
+           <span class="carname">{{$value.carNum}}</span>
+           <span class="check" tapmode onclick="fnOpenMyOrderWin()">查看订单&gt;</span>
          </div>
-         <div class="middle item"></div>
-         <div class="to item">
-           <div class="addr toaddr">{{destination}}</div>
-           <div class="time totime">{{totime}}</div>
-           <div class="date todate">{{date}}</div>
+         <div class="from-to wrap-row item">
+           <div class="item">
+             <div class="addr">{{$value.source}}</div>
+           </div>
+           <div class="middle item"></div>
+           <div class="item">
+             <div class="addr">{{$value.destination}}</div>
+           </div>
          </div>
+
+
+         <div class="item wrap-row">
+           <span class="tag item">预约乘客:</span>
+           <div class="call wrap-row" tapmode onclick="fnCallUser('{{$value.userPhone}}');">
+             <span class="call-icon item"></span>
+             <span class="call-text item">
+                联系乘客
+             </span>
+           </div>
+         </div>
+         <div class="item wrap-row">
+           <span class="tag item">乘客人数:</span>
+           <span class="text item">{{$value.userCount}}人</span>
+         </div>
+         {{if $value.detailAddress}}
+         <div class="item wrap-row">
+           <span class="tag item">详细地址:</span>
+           <span class="text item">{{$value.orderId}}</span>
+         </div>
+         {{/if}}
+         {{if $value.remark}}
+         <div class="item wrap-row">
+           <span class="tag item">订单备注:</span>
+           <span class="text item">{{$value.remark}}</span>
+         </div>
+         {{/if}}
+         <div class="item wrap-row">
+           <span class="tag item">预约时间:</span>
+           <span class="text item">{{$value.time}}</span>
+         </div>
+         <div class="item wrap-row">
+           <span class="tag item">下单时间:</span>
+           <span class="text item">{{$value.createTime}}</span>
+         </div>
+
        </div>
-       <div class="passenger wrap-row item">
-         <div class="passengernumber item">乘客数:<span>{{peoplecount}}人</span></div>
-         <div class="passengertel item">联系电话:<span>{{custel}}</span></div>
-       </div>
-     </div>
+       {{/each}}
      {{/if}}
    </script>
    <script type="text/javascript" src="../script/api.js"></script>
-   <script type="text/javascript" src="../script/SHA1.js"></script>
-   <script type="text/javascript" src="../script/APICloud-rest.js"></script>
    <script type="text/javascript" src="../script/common.js"></script>
    <script>
    apiready=function(){
@@ -94,29 +139,27 @@
    function fnGetOrder(){
 
      api.ajax({
-         url: 'http://'+url+':'+port+'/driver/orders/processin'+"?userId="+userInfo.dnum,
+         url: 'http://'+url+':'+port+'/driver/orders/processin',
          method: 'get',
          headers: {
                'Content-Type': 'application/json;charset=utf-8'
-           }
+           },
+         data:{
+           values:{
+             dnum:userInfo.dnum,
+           },
+         },
      }, function(ret, err) {
-       if(ret.code == 0){
-         var order=ret.data;
-         var timearray=order["time"].split(" -- ",2);
+       if(ret.data.length!=0){
          data = {
-           noneorder:false,
-           fromtime:timearray[0],
-           totime:timearray[1],
-           carinfo:order["carNum"],
-           source:order["source"],
-           destination:order["destination"],
-           peoplecount:order["peoplecount"],
-           custel:order["userPhone"],
-           date:order["date"]
+            noneorder:false,
+            list:ret.data
+          };
+       }else{
+         data={noneorder:true};
        }
        var html = template('order-template', data); //data为模板数据
        document.getElementById('content').innerHTML = html; //将生成的模板填充添加到对应的容器中
-        }
       });
 
    }
