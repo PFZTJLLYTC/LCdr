@@ -144,7 +144,7 @@
           <div class="text">暂无消息</div>
         </div>
       </li>
-    {{else if !nomessage}}
+    {{else}}
       {{each list}}
         <li id="li-{{$value.id}}" class="message" tapmode="highlight">
             <div class="type">出行提醒
@@ -182,12 +182,12 @@
         console.log(JSON.stringify(ret));
         if(ret.data){
           data={
-            'nomessage':false,
-            'list':ret.data
+            nomessage:false,
+            list:ret.data
           };
         }else{
           data={
-            'nomessage':true
+            nomessage:true
           };
         }
           console.log(JSON.stringify(data));
