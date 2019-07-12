@@ -114,7 +114,7 @@
            {{if $value.detailAddress}}
            <div class="item wrap-row">
              <span class="tag item">详细地址:</span>
-             <span class="text item">{{$value.orderId}}</span>
+             <span class="text item">{{$value.detailAddress}}</span>
            </div>
            {{/if}}
            {{if $value.remark}}
@@ -153,6 +153,7 @@
    var userInfo=$api.getStorage("userInfo");
    var data={noneorder:true};
 
+
    function fnGetOrder(){
 
      api.ajax({
@@ -162,17 +163,21 @@
                'Content-Type': 'application/json;charset=utf-8'
            }
      }, function(ret, err) {
-       console.log(JSON.stringify(ret));
-       if(ret.data.length!=0){
-         data = {
-            noneorder:false,
-            list:ret.data
-          };
+       if(ret){
+         console.log(JSON.stringify(ret));
+         if(ret.code==0&&ret.data.length!=0){
+           data = {
+              noneorder:false,
+              list:ret.data
+            };
+         }else{
+           data={noneorder:true};
+         }
+         var html = template('order-template', data); //data为模板数据
+         document.getElementById('content').innerHTML = html; //将生成的模板填充添加到对应的容器中
        }else{
-         data={noneorder:true};
+        console.log(JSON.stringify(err));
        }
-       var html = template('order-template', data); //data为模板数据
-       document.getElementById('content').innerHTML = html; //将生成的模板填充添加到对应的容器中
         });
    }
 
@@ -249,6 +254,33 @@
      });
 
    }
+
+  //  function fnAddMessageListener(){
+   //
+  //    alert("frm0 -ok");
+  //    api.addEventListener({
+  //        name: 'onWebSocketMessage'
+  //    }, function(ret, err){
+  //        if( ret ){
+  //             api.alert({
+  //                 title: '消息提醒',
+  //                 msg: '您有新的消息',
+  //             }, function(ret, err){
+  //                 if( ret ){
+  //                   api.openWin({
+  //                       name: 'message',
+  //                       url: './html/message.html'
+  //                   });
+  //                 }else{
+  //                      console.log( JSON.stringify( err ) );
+  //                 }
+  //             });
+   //
+  //        }else{
+  //             console.log( JSON.stringify( err ) );
+  //        }
+  //    });
+  //  }
 
    function fnCallUser(userPhone){
      api.call({

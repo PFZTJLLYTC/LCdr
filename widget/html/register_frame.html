@@ -193,7 +193,7 @@
           if (ret.code=='0') {
               api.alert({
                   title: '提示',
-                  msg: '注册成功',
+                  msg: '注册成功，待管理员审核通过后方可登陆',
                   buttons:["确定"]
               }, function(ret, err) {
                   if (ret) {
@@ -214,7 +214,11 @@
             });
           }
         } else {
-             alert(JSON.stringify(err));
+          api.toast({
+              msg: err.msg,
+              duration: 2000,
+              location: 'middle'
+          });
         }
         });
     }
