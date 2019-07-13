@@ -71,7 +71,7 @@
       </div>
 
       <div class = "item item-message">
-        <div class="button message" tapmode onclick="fnOpenMessageWin();"></div>
+        <div id="message" class="button message" tapmode onclick="fnOpenMessageWin();"></div>
       </div>
 
     </header>
@@ -96,13 +96,54 @@
             style: 'dark',
             color: '#6ab494'
         });
-        fnwebsocket();
+
         funIniGroup();
+        fnInitMessage();
+        fnwebsocket();
+
     }
 
 
     var userInfo=$api.getStorage('userInfo');
     var websocket=null;
+
+    function fnInitMessage(){
+      api.ajax({
+          url: 'http://'+url+':'+port+'/user/messages/findMessages',
+          method: 'get',
+          headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            data: {
+                values: {
+                    userId:$api.getStorage("userInfo").userId,
+                },
+            }
+      }, function(ret, err) {
+        if(ret){
+          console.log(JSON.stringify(ret));
+          if(ret.data.length!=0){
+             $api.byId('message').style.backgroundImage="url(./image/new_message.png)";
+          }else{
+             $api.byId('message').style.backgroundImage="url(./image/message.png)";
+          }
+        }else{
+          console.log(JSON.stringify(err));
+        }
+
+      });
+    }
+
+
+       //给message_frame使用
+       function fnSetMessageImage(index){
+         if(index==0){
+              $api.byId('message').style.backgroundImage="url(./image/message.png)";
+         }else if(index==1){
+              $api.byId('message').style.backgroundImage="url(./image/new_message.png)";
+         }
+
+       }
 
     function fnwebsocket(){
 
@@ -122,6 +163,8 @@
           //收到消息的回调方法
           websocket.onmessage=function(event){
            console.log('收到消息:'+event.data);
+
+           api.notification();
            api.alert({
                title: '消息提醒',
                msg: '您有新的消息',
