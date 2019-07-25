@@ -99,6 +99,7 @@
 
         funIniGroup();
         fnInitMessage();
+        fnInitPush();
         fnwebsocket();
 
     }
@@ -221,6 +222,34 @@
         });
     }
 
+    function fnInitPush(){
+
+      var push =api.require('push');
+
+      push.bind({
+        userName:userInfo.userId,
+        userId:userInfo.userId,
+      },function(ret,err){
+        if(ret){
+          console.log(JSON.stringify(ret));
+        }else{
+          console.log(JSON.stringify(err));
+        }
+      });
+
+      push.setListener(function( ret, err ){
+           if( ret ){
+              api.alert({
+                  title: '提醒',
+                  msg: ret.data,
+              });
+           }else{
+              alert( JSON.stringify( err) );
+           }
+      });
+
+
+    }
 
 
     function fnOpenMessageWin () {
