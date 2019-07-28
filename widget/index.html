@@ -237,6 +237,17 @@
         }
       });
 
+      push.joinGroup({
+          groupName: userInfo.lineId,
+      }, function(ret, err){
+           if( ret ){
+              console.log( JSON.stringify(ret) );
+           }else{
+              console.log( JSON.stringify(err) );
+           }
+      });
+
+
       push.setListener(function( ret, err ){
            if( ret ){
               api.alert({
