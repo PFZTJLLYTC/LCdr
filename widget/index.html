@@ -110,14 +110,14 @@
 
     function fnInitMessage(){
       api.ajax({
-          url: 'http://'+url+':'+port+'/user/messages/findMessages',
+          url: 'http://'+url+':'+port+'/driver/messages/findMessages',
           method: 'get',
           headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
             data: {
                 values: {
-                    userId:$api.getStorage("userInfo").userId,
+                    dnum:$api.getStorage("userInfo").dnum,
                 },
             }
       }, function(ret, err) {
