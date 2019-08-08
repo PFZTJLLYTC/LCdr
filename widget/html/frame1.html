@@ -75,6 +75,9 @@
         background-image: url(../image/aboutUs.png);
     }
 
+    .option .icon-setting{
+        background-image: url(../image/setting.png);
+    }
 
     .option .title {
         position: relative;
@@ -185,6 +188,13 @@
         <!-- 司机信息传入个人信息页面 -->
         <div class="option" tapmode onclick="fnOpenInformationWin({{myInfo}});">
             <div class="icon icon-information"></div>
+            <div class="title">我的信息</div>
+            <div class="arrow-panel">
+                <div class="text">修改信息</div>
+            </div>
+        </div>
+        <div class="option" tapmode onclick="fnOpenSettingWin();">
+            <div class="icon icon-setting"></div>
             <div class="title">我的信息</div>
             <div class="arrow-panel">
                 <div class="text">修改信息</div>
@@ -351,6 +361,12 @@
         });
 
 
+    }
+    function fnOpenSettingWin(){
+      api.openWin({
+        name:'setting',
+        url:'./setting.html',
+      });
     }
 
     // 打开客服Window
