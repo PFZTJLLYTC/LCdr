@@ -107,7 +107,7 @@
                </span>
              </div>
            </div>
-           {{if $value.userCount == 0}}
+           {{if $value.userCount === 0}}
            <div class="item wrap-row">
              <span class="tag item">订单类型:</span>
              <span class="text item">寄件</span>
@@ -261,33 +261,6 @@
      });
 
    }
-
-  //  function fnAddMessageListener(){
-   //
-  //    alert("frm0 -ok");
-  //    api.addEventListener({
-  //        name: 'onWebSocketMessage'
-  //    }, function(ret, err){
-  //        if( ret ){
-  //             api.alert({
-  //                 title: '消息提醒',
-  //                 msg: '您有新的消息',
-  //             }, function(ret, err){
-  //                 if( ret ){
-  //                   api.openWin({
-  //                       name: 'message',
-  //                       url: './html/message.html'
-  //                   });
-  //                 }else{
-  //                      console.log( JSON.stringify( err ) );
-  //                 }
-  //             });
-   //
-  //        }else{
-  //             console.log( JSON.stringify( err ) );
-  //        }
-  //    });
-  //  }
 
    function fnCallUser(userPhone){
      api.call({
