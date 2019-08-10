@@ -99,9 +99,13 @@
 
        };
 
-       function fnGetTextCode(){
-           var moduleSMSSDK=api.require('smssdk');
+       var phoneValue;
+       var textCodeValue;
+       var moduleSMSSDK;
 
+       function fnGetTextCode(){
+
+           moduleSMSSDK=api.require('smssdk');
            var country = '86';
            var phone = $api.val($api.byId("phone"));
            // param中的key命名不能改变
@@ -114,21 +118,52 @@
                  } else {
                      // 正常消息示例：{"smart":false}
                      console.log("Success:"+JSON.stringify(ret));
-                     countdown=60;                              //60秒后重发
+                     var countdown=60;                              //60秒后重发
                      var getCode=$api.byId("getCode");
+
                      getCode.disabled=true;
-                     timer=setInterval(function(){
+
+                     var timer=setInterval(function(){
                        if(countdown==0){
                          clearInterval(timer);
-                         getCode.disabled=false;                  //用$api.attr(getCode,"disabled",false)无效，原因不明
-                         $api.val(getCode,"获取验证码");
+
+                         getCode.style="color:#41d922;";
+                         getCode.innerHTML="获取验证码";
+                         getCode.disabled=false;      //用$api.attr(getCode,"disabled",false)无效，原因不明
+
                        }else{
-                         $api.val(getCode,"重新发送("+countdown+"s)");
+                         getCode.style="color:grey;";
+                         getCode.innerHTML="重新发送("+countdown+"s)";
                          countdown--;
                        }
                      },1000);
                }
              });
+       }
+
+       function fnCommitCode(){
+
+         moduleSMSSDK=api.require('smssdk');
+         phoneValue=$api.val($api.byId("phone"));
+         textCodeValue=$api.val($api.byId("textCode"));
+
+         var param = {zone:'86', phoneNumber:phoneValue, code:textCodeValue};
+         console.log(JSON.stringify(param));
+         moduleSMSSDK.commitCode(param, function(ret, err){
+         if (err !== null && err !== undefined && err !== '') {
+           // 错误消息示例：{"msg":"Template not exist.","code":484}
+           alert(JSON.stringify(err.msg));
+           } else {
+             api.openWin({
+                 name: 'register',
+                 url: './register.html',
+                 pageParam: {
+                     phoneValue: phoneValue
+                 }
+             });
+
+           }
+         });
        }
 
        function fnOpenCountrySelectWin(){

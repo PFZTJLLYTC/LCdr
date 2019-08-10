@@ -85,16 +85,6 @@
 </head>
 
 <body>
-    <div class="row wrap-row">
-        <label for="phone" class="tag">手机号码：</label>
-        <input id="phone" class="input" type="text">
-        <input id="tel" class="btn-confirm" tapmode type="button" value="获取验证码" onclick="fnGetTextCode()"></input>
-    </div>
-
-    <div class="row wrap-row">
-        <label for="textCode" class="tag">短信验证：</label>
-        <input id="textCode" class="input" type="text">
-    </div>
 
     <div class="row wrap-row">
         <label for="carNum" class="tag">密&#12288;&#12288;码：</label>
@@ -178,58 +168,13 @@
       });
     }
 
-    function fnGetTextCode(){
-
-        var country = '86';
-        var phone = $api.val($api.byId("phone"));
-        // param中的key命名不能改变
-        var param = {zone:country, phoneNumber:phone};
-        moduleSMSSDK.getTextCode(param, function(ret, err){
-              if (err !== null && err !== undefined && err !== '') {
-                  // 错误消息示例：{"msg":"Template not exist.","code":484}
-                  alert(JSON.stringify(err.msg));
-                  console.log("Error:\n"+JSON.stringify(err));
-              } else {
-                  // 正常消息示例：{"smart":false}
-                  countdown=60;                              //60秒后重发
-                  var tel=$api.byId("tel");
-                  tel.disabled=true;
-                  timer=setInterval(function(){
-                    if(countdown==0){
-                      clearInterval(timer);
-                      tel.disabled=false;                  //用$api.attr(tel,"disabled",false)无效，原因不明
-                      $api.val(tel,"获取验证码");
-                    }else{
-                      $api.val(tel,countdown+"s 重新发送");
-                      countdown--;
-                    }
-                  },1000);
-                console.log("Success:"+JSON.stringify(ret));
-
-            }
-          });
-    }
-    //提交验证码
-    function fnCommitCode(){
-
-      var param = {zone:'86', phoneNumber:phoneValue, code:confirmValue};
-      console.log(JSON.stringify(param));
-      moduleSMSSDK.commitCode(param, function(ret, err){
-      if (err !== null && err !== undefined && err !== '') {
-        // 错误消息示例：{"msg":"Template not exist.","code":484}
-        alert(JSON.stringify(err.msg));
-        }
-      });
-    }
 
     function fnRegister(){
-
-      fnCommitCode();
 
       nameValue=$api.val($api.byId("name"));
       birthdayValue=$api.val($api.byId("birthday"));  //返回数据格式：yyyy-mm-dd
       carNumValue=$api.val($api.byId("carNum"));
-      phoneValue=$api.val($api.byId("phone"));
+      phoneValue=api.pageParam.phoneValue;
       lineValue=$api.val($api.byId("line"));
       passwordValue=$api.val($api.byId("password"));
       seatTypeValue=$api.val($api.byId("seatType"));
