@@ -67,6 +67,17 @@
         border-radius: 8px;
     }
 
+    .btn-confirm {
+        height: 20px;
+        text-align: center;
+        color: blue;
+        font-size: 14px;
+        line-height: 25px;
+        text-align: center;
+        outline: none;
+        border: none;
+    }
+
     .highlight {
         opacity: 0.7;
     }
@@ -74,34 +85,50 @@
 </head>
 
 <body>
+    <div class="row wrap-row">
+        <label for="phone" class="tag">手机号码：</label>
+        <input id="phone" class="input" type="text">
+        <input id="tel" class="btn-confirm" tapmode type="button" value="获取验证码" onclick="fnGetTextCode()"></input>
+    </div>
+
+    <div class="row wrap-row">
+        <label for="textCode" class="tag">短信验证：</label>
+        <input id="textCode" class="input" type="text">
+    </div>
+
+    <div class="row wrap-row">
+        <label for="carNum" class="tag">密&#12288;&#12288;码：</label>
+        <input id="password" class="input" type="password">
+    </div>
+
+    <div class="row wrap-row">
+        <label for="name" class="tag">姓&#12288;&#12288;名：</label>
+        <input id="name" class="input" type="text">
+    </div>
+
+    <div class="row wrap-row">
+        <label for="carNum" class="tag">车牌号码：</label>
+        <input id="carNum" class="input" type="text">
+    </div>
+
+    <div class="row wrap-row">
+        <label for="birthday" class="tag">出生日期：</label>
+        <input id="birthday" class="input" type="date">
+    </div>
+
     <div id="content"></div>
 
+    <div class="row wrap-row">
+        <label for="seatType" class="tag">可载客数：</label>
+        <select id="seatType" class="select">
+          <option value="" hidden></option>
+          <option value="0">4座</option>
+          <option value="1">7座</option>
+        </select>
+    </div>
+    <div class="btn" tapmode="highlight" onclick="fnRegister()">注册</div>
 
     <script id="option-template" type="text/html">
-      <div class="row wrap-row">
-          <label for="phone" class="tag">手机号码：</label>
-          <input id="phone" class="input" type="text">
-      </div>
-
-      <div class="row wrap-row">
-          <label for="carNum" class="tag">密&#12288;&#12288;码：</label>
-          <input id="password" class="input" type="password">
-      </div>
-
-      <div class="row wrap-row">
-          <label for="name" class="tag">姓&#12288;&#12288;名：</label>
-          <input id="name" class="input" type="text">
-      </div>
-
-      <div class="row wrap-row">
-          <label for="carNum" class="tag">车牌号码：</label>
-          <input id="carNum" class="input" type="text">
-      </div>
-
-      <div class="row wrap-row">
-          <label for="birthday" class="tag">出生日期：</label>
-          <input id="birthday" class="input" type="date">
-      </div>
 
       <div class="row wrap-row">
           <span for="line" class="tag">注册路线：</span>
@@ -113,15 +140,7 @@
           </select>
       </div>
 
-      <div class="row wrap-row">
-          <label for="seatType" class="tag">可载客数：</label>
-          <select id="seatType" class="select">
-            <option value="" hidden></option>
-            <option value="0">4座</option>
-            <option value="1">7座</option>
-          </select>
-      </div>
-      <div class="btn" tapmode="highlight" onclick="fnRegister()">注册</div>
+
     </script>
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/common.js"></script>
@@ -159,7 +178,53 @@
       });
     }
 
+    function fnGetTextCode(){
+
+        var country = '86';
+        var phone = $api.val($api.byId("phone"));
+        // param中的key命名不能改变
+        var param = {zone:country, phoneNumber:phone};
+        moduleSMSSDK.getTextCode(param, function(ret, err){
+              if (err !== null && err !== undefined && err !== '') {
+                  // 错误消息示例：{"msg":"Template not exist.","code":484}
+                  alert(JSON.stringify(err.msg));
+                  console.log("Error:\n"+JSON.stringify(err));
+              } else {
+                  // 正常消息示例：{"smart":false}
+                  countdown=60;                              //60秒后重发
+                  var tel=$api.byId("tel");
+                  tel.disabled=true;
+                  timer=setInterval(function(){
+                    if(countdown==0){
+                      clearInterval(timer);
+                      tel.disabled=false;                  //用$api.attr(tel,"disabled",false)无效，原因不明
+                      $api.val(tel,"获取验证码");
+                    }else{
+                      $api.val(tel,countdown+"s 重新发送");
+                      countdown--;
+                    }
+                  },1000);
+                console.log("Success:"+JSON.stringify(ret));
+
+            }
+          });
+    }
+    //提交验证码
+    function fnCommitCode(){
+
+      var param = {zone:'86', phoneNumber:phoneValue, code:confirmValue};
+      console.log(JSON.stringify(param));
+      moduleSMSSDK.commitCode(param, function(ret, err){
+      if (err !== null && err !== undefined && err !== '') {
+        // 错误消息示例：{"msg":"Template not exist.","code":484}
+        alert(JSON.stringify(err.msg));
+        }
+      });
+    }
+
     function fnRegister(){
+
+      fnCommitCode();
 
       nameValue=$api.val($api.byId("name"));
       birthdayValue=$api.val($api.byId("birthday"));  //返回数据格式：yyyy-mm-dd

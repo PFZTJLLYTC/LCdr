@@ -25,5 +25,5 @@
 	<permission name="fileSystem" />
 	<permission name="internet" />
 	<permission name="bootCompleted" />
-	<permission name="hardware" />
+	<permission name="hardware" />  <meta-data name="Mob-AppKey" value="2c01f68b1238f"/>  <meta-data name="Mob-AppSecret" value="97c475e33dcc2605476fae049b16c049"/>
 </widget>
