@@ -155,8 +155,8 @@
            alert(JSON.stringify(err.msg));
            } else {
              api.openWin({
-                 name: 'register',
-                 url: './register.html',
+                 name: api.pageParam.nextPage,
+                 url: './'+api.pageParam.nextPage+'.html',
                  pageParam: {
                      phoneValue: phoneValue
                  }
