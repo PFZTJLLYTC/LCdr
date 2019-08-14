@@ -59,7 +59,7 @@
         border: none;
     }
 
-    #phone,#country,#textCode{
+    .input {
       width: 35%;
       height: 20px;
       line-height: 20px;
@@ -78,15 +78,15 @@
      <div class="title">请输入你的手机号</div>
      <div class="row">
        <label for="country" class="tag">国家/地区</label>
-       <input id="country" readonly="readonly" value="中国" onclick="fnOpenCountrySelectWin();"></input>
+       <input id="country" class="input" readonly="readonly" value="中国" onclick="fnOpenCountrySelectWin();"></input>
      </div>
      <div class="row">
        <label for="phone" class="tag">+86</label>
-       <input id="phone" placeholder="请输入手机号码"></input>
+       <input id="phone" class="input" placeholder="请输入手机号码"></input>
      </div>
      <div class="row">
        <label for="textCode" class="tag">验证码</label>
-       <input id="textCode" placeholder="请输入验证码"></input>
+       <input id="textCode" class="input" placeholder="请输入验证码"></input>
        <button id="getCode" class="btn-confirm" tapmode type="button" onclick="fnGetTextCode()">获取验证码</button>
      </div>
      <div class="btn" tapmode="highlight" onclick="fnCommitCode();">

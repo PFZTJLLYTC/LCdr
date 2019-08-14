@@ -7,75 +7,56 @@
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
     <title>注册Frame</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
-    <script src="../script/template-web.js"></script>
     <style>
-    .row {
-        width: auto;
-        height: 70px;
-        box-sizing: border-box;
-        margin-left: 32px;
-        margin-right: 32px;
-        padding-top: 40px;
-        border-bottom: 1px solid #888;
+
+    .title{
+       height: 60px;
+       padding-top: 30px;
+       font-size: 26px;
+       text-align: center;
+       line-height: 60px;
     }
-    .wrap-row{
-      display: -webkit-box;
-      display: -webkit-flex;
-      display: flex;
-      -webkit-box-orient: horizontal;
-      -webkit-flex-flow: row;
-      flex-flow: row;
+
+    .row{
+      height: 35px;
+      margin-top: 30px;
+      margin-bottom: 10px;
+      margin-left: 20px;
+      margin-right: 20px;
+      border-bottom: 1px solid #E0E0E0;
     }
+
     .tag{
-      width: 110px;
-      height: 20px;
-      line-height: 20px;
+      display: inline-block;
+      width: 85px;
       font-size: 16px;
+      text-align: left;
     }
-    .input {
-        width: 100%;
-        height: 20px;
-        line-height: 20px;
-        border: none;
-        outline: none;
-        font-size: 16px;
+
+    .btn{
+      width: 90%;
+      height: 50px;
+      margin-left: 20px;
+      margin-right: 20px;
+      margin-top: 32px;
+      color: #fff;
+      font-size: 16px;
+      line-height: 50px;
+      text-align: center;
+      background-color: #41d922;
+      background-repeat: no-repeat;
+      background-position: center;
     }
-    .select{
-      width: 100%;
+
+
+     .input,.select{
+      width: 50%;
       height: 20px;
       line-height: 20px;
       border: none;
       outline: none;
       font-size: 16px;
       background-color: white;
-    }
-
-    input,select{vertical-align: middle;}
-
-    .btn {
-        width: 200px;
-        height: 50px;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 32px;
-        background-image: -webkit-linear-gradient(to right , #7A88FF, #7AFFAF);
-        background-image: linear-gradient(to right , #7A88FF, #7AFFAF);
-        color: #fff;
-        font-size: 24px;
-        line-height: 50px;
-        text-align: center;
-        border-radius: 8px;
-    }
-
-    .btn-confirm {
-        height: 20px;
-        text-align: center;
-        color: blue;
-        font-size: 14px;
-        line-height: 25px;
-        text-align: center;
-        outline: none;
-        border: none;
     }
 
     .highlight {
@@ -86,57 +67,49 @@
 
 <body>
 
-    <div class="row wrap-row">
-        <label for="carNum" class="tag">密&#12288;&#12288;码：</label>
-        <input id="password" class="input" type="password">
-    </div>
-
-    <div class="row wrap-row">
-        <label for="name" class="tag">姓&#12288;&#12288;名：</label>
+    <div class="row">
+        <label for="name" class="tag">姓名</label>
         <input id="name" class="input" type="text">
     </div>
 
-    <div class="row wrap-row">
-        <label for="carNum" class="tag">车牌号码：</label>
+    <div class="row">
+        <label for="password" class="tag">密码</label>
+        <input id="password" class="input" type="password">
+    </div>
+
+    <div class="row">
+        <label for="carNum" class="tag">车牌号码</label>
         <input id="carNum" class="input" type="text">
     </div>
 
-    <div class="row wrap-row">
-        <label for="birthday" class="tag">出生日期：</label>
+    <div class="row">
+        <label for="birthday" class="tag">出生日期</label>
         <input id="birthday" class="input" type="date">
     </div>
 
     <div id="content"></div>
 
-    <div class="row wrap-row">
-        <label for="seatType" class="tag">可载客数：</label>
+    <div class="row">
+        <span  class="tag">可载客数</span>
         <select id="seatType" class="select">
           <option value="" hidden></option>
           <option value="0">4座</option>
           <option value="1">7座</option>
         </select>
     </div>
+
+    <div class="row">
+      <span class="tag">注册线路</span>
+      <input id="line" type="text" readonly="readonly" value="请选择" onclick="fnOpenLineSelectWin();">
+    </div>
+
     <div class="btn" tapmode="highlight" onclick="fnRegister()">注册</div>
 
-    <script id="option-template" type="text/html">
-
-      <div class="row wrap-row">
-          <span for="line" class="tag">注册路线：</span>
-          <select id="line" class="select">
-            <option value="" hidden></option>
-            {{each list}}
-              <option value="{{$value}}">{{$value}}</option>
-            {{/each}}
-          </select>
-      </div>
-
-
-    </script>
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript">
     apiready=function(){
-      fnInit();
+
     };
 
     var nameValue;
@@ -147,7 +120,8 @@
     var passwordValue;
     var seatTypeValue;
 
-    function fnInit(){
+    function fnOpenLineSelectWin(){
+
       api.ajax({
           url: 'http://'+url+':'+port+'/driver/lines/all',
           method: 'get',
@@ -157,17 +131,24 @@
       },function(ret, err){
           if (ret) {
               console.log( JSON.stringify( ret ) );
-              var data={
-                list:ret.data
-              }
-              var html = template('option-template', data); //data为模板数据
-              document.getElementById('content').innerHTML = html; //将生成的模板填充添加到对应的容器中
+              api.openWin({
+                  name: 'lineSelect',
+                  url: './lineSelect.html',
+                  pageParam: {
+                      data:ret.data,
+                  }
+              });
+
           } else {
               console.log( JSON.stringify( err ) );
           }
       });
+
     }
 
+    function fnSetLine(name){
+       $api.val($api.byId('line'),name);
+    }
 
     function fnRegister(){
 
