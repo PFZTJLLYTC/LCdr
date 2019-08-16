@@ -8,25 +8,21 @@
     <link rel="stylesheet" type="text/css" href="../css/aui.css"/>
     <script src="../script/template-web.js"></script>
     <style>
-    header {
-        height: 40px;
-        padding-top: 8px;
+    html,body{
+      background-color:  rgb(235, 235, 235);
     }
 
-    header .username {
-        height: 30px;
-        line-height: 30px;
-        font-size: 14px;
-        color: #444;
-        text-align: center;
-    }
 
     header .account-info {
-        height: 30px;
-        line-height: 30px;
+        height: 50px;
+        line-height: 50px;
         font-size: 14px;
         color: #444;
         text-align: center;
+        border-bottom: 1px solid #ddd;
+        background-color: white;
+        margin-top: 10px;
+        margin-bottom: 10px;
     }
 
     .separator {
@@ -39,6 +35,7 @@
         width: 100%;
         height: 61px;
         border-bottom: 1px solid #ddd;
+        background-color: white;
     }
 
     .option .icon {
@@ -127,6 +124,11 @@
         color: #888;
         text-align: right;
     }
+
+    .section{
+      margin-bottom: 10px;
+    }
+
     </style>
 </head>
 
@@ -140,7 +142,7 @@
           今日载客量：{{todayUsers}}
         </div>
     </header>
-    <section>
+    <section class="section">
         <div class="option" tapmode onclick="fnOpenMyOrderWin();">
             <div class="icon icon-myorder"></div>
             <div class="title">我的订单</div>
@@ -185,8 +187,11 @@
                 </div>
             </div>
         </div>
+    </section>
+
+    <section class="section">
         <!-- 司机信息传入个人信息页面 -->
-        <div class="option" tapmode onclick="fnOpenInformationWin({{myInfo}});">
+        <div class="option" tapmode onclick="fnOpenInformationWin();">
             <div class="icon icon-information"></div>
             <div class="title">我的信息</div>
             <div class="arrow-panel">
@@ -195,9 +200,9 @@
         </div>
         <div class="option" tapmode onclick="fnOpenSettingWin();">
             <div class="icon icon-setting"></div>
-            <div class="title">我的信息</div>
+            <div class="title">应用设置</div>
             <div class="arrow-panel">
-                <div class="text">修改信息</div>
+                <div class="text">修改设置</div>
             </div>
         </div>
         <div class="option" tapmode onclick="fnOpenqusAndAnsWin();">
@@ -243,11 +248,6 @@
               data={
                 todayOrders:ret.data.todayOrders,
                 todayUsers:ret.data.todayUsers,
-                myInfo:{
-                  name:ret.data.name,
-                  dnum:ret.data.dnum,
-                  carNum:ret.data.carNum,
-                },
                 seatType:ret.data.seatType,
               };
               var html = template('account-template', data); //data为模板数据
@@ -351,13 +351,10 @@
 
 
     // 打开信息Window
-    function fnOpenInformationWin(myInfo) {
+    function fnOpenInformationWin() {
         api.openWin({
             name: 'information',
-            url: './information.html',
-            pageParam: {
-                dataSource:myInfo
-            }
+            url: './information.html'
         });
 
 

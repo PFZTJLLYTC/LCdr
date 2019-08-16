@@ -57,11 +57,13 @@
     if(ret){
       console.log(JSON.stringify(ret));
       if(ret.eventType=="click"){
+
         api.execScript({
             name: 'register',
             frameName: 'register_frame',
-            script: 'fnSetLine("'+ret.contact.name+'")',//函数传字符串参数
+            script: 'fnSetLine("'+ret.contact.name+'");'
         });
+
         api.closeWin();
 
       }

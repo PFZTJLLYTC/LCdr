@@ -10,7 +10,7 @@
     <style>
     header {
         width: 100%;
-        height: 90px;
+        height: 50px;
         background-image: -webkit-linear-gradient(to right , #7A88FF, #7AFFAF);
         background-image: linear-gradient(to right , #7A88FF, #7AFFAF);
     }
@@ -34,8 +34,8 @@
         text-align: center;
         color: #fff;
         font-size: 20px;
-        padding-top:40px;
     }
+
     nav {
         display: -webkit-box;
         display: -webkit-flex;
@@ -75,16 +75,13 @@
         <h1>订单详情</h1>
     </header>
     <nav id="nav">
-        <div class="menu selected" tapmode onclick="fnSetNavMenuSelected(0)">进行中</div>
-        <div class="menu" tapmode onclick="fnSetNavMenuSelected(1)">已完成</div>
+        <div class="menu selected" tapmode onclick="fnSetNavMenuSelected(0)">待处理</div>
+        <div class="menu" tapmode onclick="fnSetNavMenuSelected(1)">进行中</div>
     </nav>
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript">
-    var header = $api.byId("header");
-    var nav = $api.byId("nav");
-    var headerH = $api.offset(header).h;
-    var navH = $api.offset(nav).h;
     apiready = function() {
+      $api.fixStatusBar( $api.byId('header') );
         var frames = [];
         for (var i = 0; i < 2; i++) {
             frames.push({
@@ -98,12 +95,11 @@
         api.openFrameGroup({
             name: 'myorderFrameGroup',
             scrollEnabled: true, // 支持手势滑动切换
-            bounces:true,
-            customRefreshHeader: 'UIPullRefresh',
             rect: {
-                marginTop: headerH + navH, // 采用margin布局
-                w: 'auto', // 自动填充所在Window的宽度
-                h: 'auto' // 自动填充所在Window的高度
+                x:0,
+                y: 114,
+                w: 'auto',
+                h: 'auto'
             },
             index: 0, // 默认显示第一个Frame
             frames: frames,

@@ -67,13 +67,15 @@
 
 <body>
 
+    <div class="title">请填写注册信息</div>
+
     <div class="row">
-        <label for="name" class="tag">姓名</label>
+        <label for="name" class="tag">司机姓名</label>
         <input id="name" class="input" type="text">
     </div>
 
     <div class="row">
-        <label for="password" class="tag">密码</label>
+        <label for="password" class="tag">登陆密码</label>
         <input id="password" class="input" type="password">
     </div>
 
@@ -100,7 +102,7 @@
 
     <div class="row">
       <span class="tag">注册线路</span>
-      <input id="line" type="text" readonly="readonly" value="请选择" onclick="fnOpenLineSelectWin();">
+      <span id="line" onclick="fnOpenLineSelectWin();" style="color:grey;">请选择线路</span>
     </div>
 
     <div class="btn" tapmode="highlight" onclick="fnRegister()">注册</div>
@@ -116,9 +118,10 @@
     var birthdayValue;
     var carNumValue;
     var phoneValue;
-    var lineNameValue;
+    var lineValue;
     var passwordValue;
     var seatTypeValue;
+    var line=$api.byId('line');
 
     function fnOpenLineSelectWin(){
 
@@ -146,9 +149,6 @@
 
     }
 
-    function fnSetLine(name){
-       $api.val($api.byId('line'),name);
-    }
 
     function fnRegister(){
 
@@ -156,7 +156,7 @@
       birthdayValue=$api.val($api.byId("birthday"));  //返回数据格式：yyyy-mm-dd
       carNumValue=$api.val($api.byId("carNum"));
       phoneValue=api.pageParam.phoneValue;
-      lineValue=$api.val($api.byId("line"));
+      lineValue=$api.byId('line').innerHTML;
       passwordValue=$api.val($api.byId("password"));
       seatTypeValue=$api.val($api.byId("seatType"));
 
@@ -213,6 +213,13 @@
         }
         });
     }
+
+    function fnSetLine(name){
+      line.style="color:black";
+      line.innerHTML=name;
+    }
+
+
     </script>
 </body>
 </html>
