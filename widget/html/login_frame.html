@@ -135,12 +135,50 @@
     function fnCheckLogin(){
       var userInfo=$api.getStorage('userInfo');
       console.log(JSON.stringify(userInfo));
+
       if(userInfo){
-        api.openWin({
-              name: 'index',
-              url: '../index.html',
-              slidBackEnabled:false
-        });
+        api.ajax({
+            url: 'http://'+url+':'+port+'/driver/checkLogin',
+            method: 'get',
+            headers: {
+                 'Content-Type': 'application/json;charset=utf-8'
+            },
+            data:{
+              values:{
+                dnum:userInfo.dnum,
+              }
+            }
+        }, function(ret, err) {
+
+          if(ret!=null){
+            console.log(JSON.stringify(ret));
+            if (ret.code==0) {
+                // 保存用户信息
+                console.log(JSON.stringify(ret.data));
+                $api.setStorage('userInfo', ret.data);
+
+                api.openWin({
+                    name: 'index',
+                    url: '../index.html',
+                    slidBackEnabled:false
+                });
+            } else {
+                api.toast({
+                    msg: ret.msg,
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }
+          }else{
+            console.log(JSON.stringify(err));
+            api.toast({
+                msg: '网络异常',
+                duration: 2000,
+                location: 'middle'
+            });
+          }
+
+          });
       }
     }
 
@@ -280,6 +318,7 @@
                 // 保存用户信息
                 console.log(JSON.stringify(ret.data));
                 $api.setStorage('userInfo', ret.data);
+
                 api.openWin({
                     name: 'index',
                     url: '../index.html',
