@@ -101,6 +101,13 @@
         .highlight {
             opacity: 0.7;
         }
+
+        #footer{
+          margin-top: 20px;
+          font-size:12px;
+          text-align: center;
+          color: grey;
+        }
     </style>
 </head>
 
@@ -118,6 +125,11 @@
 <button class="forgetPassword" tapmode type="button" onclick="fnForgetPassword();">忘记密码</button>
 
 <div class="btn" tapmode="highlight" onclick="fnLogin();">登录</div>
+
+<div id="footer">
+  <span>登陆即代表你同意用户</span>
+  <span style="color:#41d922" tapmode onclick="fnOpenPrivacyPolicy();">隐私政策</span>
+</div>
 
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/common.js"></script>

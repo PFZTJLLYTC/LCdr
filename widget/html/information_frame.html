@@ -81,12 +81,17 @@
       </div>
 
       <div class="row">
-          <span class="tag">密码</span>
-          <span id"password" class="changePassword" onclick="fnChangePassword();">修改密码</span>
+          <span class="tag">完成订单</span>
+          <input id="workTimes" type="text" class="input" readonly>
       </div>
 
+      <!-- <div class="row">
+          <span class="tag">密码</span>
+          <span id"password" class="changePassword" onclick="fnChangePassword();">修改密码</span>
+      </div> -->
 
-      <div class="btn" tapmode onclick="fnUpdateInfo();">提交</div>
+
+      <div class="btn" tapmode onclick="fnChangePassword();">修改密码</div>
 
   <script type="text/javascript" src="../script/api.js"></script>
   <script type="text/javascript" src="../script/common.js"></script>
@@ -101,6 +106,7 @@
   var driverName;
   var carNum;
   var dnum;
+  var workTimes;
 
 
   function fnShowInfo(){
@@ -109,10 +115,12 @@
     driverName=$api.byId("driverName");
     carNum=$api.byId("carNum");
     dnum=$api.byId("dnum");
+    workTimes=$api.byId("workTimes");
 
     $api.val(driverName,userInfo.name);
     $api.val(carNum,userInfo.carNum);
     $api.val(dnum,userInfo.dnum);
+    $api.val(workTimes,userInfo.workTimes);
   }
 
   function fnUpdateInfo(){
