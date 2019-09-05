@@ -370,6 +370,14 @@
 
     }
 
+    function fnOpenPrivacyPolicy(){
+      api.openWin({
+          name: 'privacyPolicy',
+          url: './privacyPolicy.html',
+      });
+
+    }
+
     // 被注册页面调用，用于从注册页面传递用户名
     function fnSetUsername(username_) {
         usernameValue = username_;
