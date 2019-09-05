@@ -13,7 +13,7 @@
 	<preference name="hScrollBarEnabled" value="false"/>
 	<preference name="vScrollBarEnabled" value="false"/>
 	<preference name="autoLaunch" value="true"/>
-	<preference name="fullScreen" value="false"/>
+	<preference name="fullScreen" value="false"/>  <preference name="customRefreshHeader" value="UIPullRefresh"/>
 	<preference name="autoUpdate" value="true" />
 	<preference name="smartUpdate" value="false" />
 	<preference name="debug" value="true"/>
