@@ -4,7 +4,7 @@
         Example For APICloud.
     </description>
     <author email="446110075@qq.com" href="https://github.com/PFZTJLLYTC">        PFZTJLLYTC    </author>
-    <!-- <content src="./index.html" /> -->    <content src="./html/login.html" />
+    <content src="./html/login.html" />
     <access origin="*" />
     <preference name="pageBounce" value="false"/>
 	<preference name="appBackground" value="rgba(0,0,0,0.0)"/>
@@ -17,7 +17,7 @@
 	<preference name="autoUpdate" value="true" />
 	<preference name="smartUpdate" value="false" />
 	<preference name="debug" value="true"/>
-	<preference name="statusBarAppearance" value="true"/>
+	<preference name="statusBarAppearance" value="true"/>  <preference name="backgroundMode" value="audio | location"/>//baiduNavigation 获取后台定位、后台播报功能
 	<permission name="readPhoneState" />
 	<permission name="camera" />
 	<permission name="record" />
@@ -25,5 +25,5 @@
 	<permission name="fileSystem" />
 	<permission name="internet" />
 	<permission name="bootCompleted" />
-	<permission name="hardware" />  <meta-data name="Mob-AppKey" value="2c01f68b1238f"/>  <meta-data name="Mob-AppSecret" value="97c475e33dcc2605476fae049b16c049"/>
+	<permission name="hardware" />  <feature name="bMap">    <param name="android_api_key" value="oGgcTXUA3bmvpv9a8htLGzSdE0CgcOaN" />    <param name="android_tts_appid" value="17711012" /> </feature>  <meta-data name="Mob-AppKey" value="2c01f68b1238f"/>  <meta-data name="Mob-AppSecret" value="97c475e33dcc2605476fae049b16c049"/>
 </widget>

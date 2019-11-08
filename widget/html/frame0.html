@@ -144,6 +144,11 @@
              <span class="confirm-text item" onclick="fnConfirmOrder('{{$value.orderId}}')">确认送达</span>
            </div>
 
+           <div class="item wrap-row">
+             <span class="tag item">:</span>
+             <span class="confirm-text item" onclick="fnOpenbMapWin();">去接乘客</span>
+           </div>
+
          </div>
        </li>
        {{/each}}
@@ -160,6 +165,16 @@
    var userInfo=$api.getStorage("userInfo");
    var data={noneorder:true};
 
+   function fnOpenbMapWin(){
+     api.openWin({
+         name: 'bMap',
+         url: './bMap.html',
+         pageParam: {
+             name: 'test'
+         }
+     });
+
+   }
 
    function fnGetOrder(){
 
