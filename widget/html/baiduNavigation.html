@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>百度地图</title>
+    <link rel="stylesheet" type="text/css" href="../css/aui.css" />
+</head>
+
+<body>
+
+
+
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript">
+
+apiready=function(){
+    fnBMapGetLocation();
+}
+
+function fnBMapGetLocation(){
+  var bMap=api.require("bMap");
+
+  bMap.getLocation({
+      accuracy: '100m',
+      autoStop: true,
+      filter: 1
+  }, function(ret, err){
+      if(ret.status){
+        fnStartNavigation(ret.lon,ret.lat);
+
+      }else{
+          alert(err.code);
+      }
+  });
+
+}
+
+
+function fnStartNavigation(lon,lat){
+
+  var baiduNavigation=api.require('baiduNavigation');
+
+  baiduNavigation.start({
+    start: {                            // 起点信息.
+        position: {                     // 经纬度，与address配合可为空
+            lon: lon,    // 经度.
+            lat: lat     // 纬度.
+        }
+    },
+    goBy: [],
+    end: {                              // 终点信息.
+        position: {                     // 经纬度，与address配合可为空
+            lon: api.pageParam.lon,    // 经度
+            lat: api.pageParam.lat              // 纬度
+        }
+    }
+  }, function(ret, err) {
+      if (ret.status) {
+      console.log(JSON.stringify(ret));
+      } else {
+          var msg = "未知错误";
+          if (1 == err.code) {
+              msg = "获取地理位置失败";
+          }
+          if (2 == err.code) {
+              msg = "定位服务未开启";
+          }
+          if (3 == err.code) {
+              msg = "线路取消";
+          }
+          if (4 == err.code) {
+              msg = "退出导航";
+          }
+          if (5 == err.code) {
+              msg = "退出导航声明页面";
+          }
+          api.alert({
+              title: "导航出错",
+              msg: msg
+          });
+      }
+  });
+}
+</script>
+
+</html>

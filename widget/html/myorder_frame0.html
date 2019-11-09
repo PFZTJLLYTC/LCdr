@@ -58,6 +58,11 @@
       background-repeat: no-repeat;
       background-size: 20px 20px;
     }
+
+    .text-onclick{
+      text-align: right;
+      color: #41d922;
+    }
     </style>
 </head>
 <body>
@@ -109,8 +114,22 @@
          {{/if}}
          {{if $value.detailAddress}}
          <div class="item wrap-row">
-           <span class="tag item">详细地址:</span>
+           <span class="tag item">上车地点:</span>
+           {{if $value.startLon !==undefined && $value.startLon!==null && $value.startLon !=="" && $value.startLat!==""}}
+           <span class="text-onclick item" onclick="fnOpenBaiduNavigation('{{$value.startLon}}','{{$value.startLat}}');">{{$value.detailAddress}}</span>
+           {{else}}
            <span class="text item">{{$value.detailAddress}}</span>
+           {{/if}}
+         </div>
+         {{/if}}
+         {{if $value.detailDestination}}
+         <div class="item wrap-row">
+           <span class="tag item">下车地点:</span>
+           {{if $value.endLon!==undefined && $value.endLon!==null && $value.endLon !=="" && $value.endLat!==""}}
+           <span class="text-onclick item" onclick="fnOpenBaiduNavigation('{{$value.endLon}}','{{$value.endLat}}');">{{$value.detailDestination}}</span>
+           {{else}}
+           <span class="text item">{{$value.detailDestination}}</span>
+           {{/if}}
          </div>
          {{/if}}
          {{if $value.remark}}
